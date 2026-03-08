@@ -1,0 +1,49 @@
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+}
+
+html {
+  /* Força o snapping no eixo Y */
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  /* Garante que o html ocupa a altura toda */
+  height: 100%;
+  overflow-y: scroll;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(to bottom, #0a192f, #1e2a3f);
+  color: #fff;
+  margin: 0;
+  height: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
+}
+
+/* O container não deve ter snapping, mas os seus filhos sim */
+.container {
+  max-width: 1536px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+section {
+  height: 100vh;
+  /* Alinha cada secção ao centro/topo no snap */
+  scroll-snap-align: center;
+  /* Garante que a secção pareça um bloco inteiro */
+  scroll-snap-stop: always; 
+}
+
+/* Responsividade simplificada */
+@media (min-width: 640px) { .container { max-width: 640px; } }
+@media (min-width: 768px) { .container { max-width: 768px; } }
+@media (min-width: 1024px) { .container { max-width: 1024px; } }
+@media (min-width: 1280px) { .container { max-width: 1280px; } }
+@media (min-width: 1536px) { .container { max-width: 1536px; } }
