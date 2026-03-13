@@ -1,3 +1,193 @@
-.services{
+.services {
+  width: 100%;
+  height: 100vh;        /* <- vh em vez de % — não depende do pai */
+  overflow: hidden;
+  display: flex;
+}
+
+.sSection {
+  width: 50%;
+  height: 100%;         /* <- altura explícita no filho */
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+}
+
+.sSection.left {
+  margin-top: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: left;
+  padding-left: 50px;
+}
+
+.sItem {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  gap: 40px;
+  background-color: #f2eff333;
+  padding: 30px;
+  border-radius: 10px;
+  width: 80%;
+  font-size: 24px;
+  color: black;
+  margin-bottom: 20px;
+}
+
+h1.sTitle{
+  font-size: 96px;
+  color: #15ed7aff;
+  font-weight: 300;
+}
+/* Remove o espaço entre .sSection e .left */
+/* E garante que o seletor chega ao .counters */
+
+.sSection.left .counters {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: space-between; /* Alinha à esquerda */
+  margin-top: 20px;
+ 
+  padding: 20px;
+   color: #b302f9ff;
+ /* Adicionado para não ocupar 100% se não quiseres */
+}
+
+/* Dica: Garante que o container pai .sLeftC não está a cortar o conteúdo */
+.sLeftC {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.serviceItem {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap:8px;
   
+  background-color: #f2eff333;
+  padding: 30px;
+  border-radius: 10px;
+  width: 80%;
+border:1px solid #073203ff;
+  color: black;
+}
+
+.serviceLink {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 10px;
+  gap: 10px;
+}
+
+.imgContainer {
+  width: 50px;
+  height: 50px;
+  padding: 5px;
+  border-radius: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imgContainer:nth-child(1) {
+  background-color: #ce60f3ff;
+}
+
+.imgContainer:nth-child(2) {
+  background-color: #1d5d05ff;
+}
+
+.imgContainer:nth-child(3) {
+  background-color: #f4aa0aff;
+}
+
+
+.imgContainer.serviceImg {
+  margin:auto;
+}
+
+.serviceImg{
+  width: 30px;
+  height: auto;
+}
+
+.sTextContainer {   
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+}
+
+.serviceTitle {
+  font-size: 36px;
+  margin-top: 10px;
+  color: #15ed7aff;
+}
+
+.serviceDescription {
+  font-size: 18px;
+  color: white;
+}
+
+
+.sLeftC .counters{
+   width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: between;
+  gap: 100px;
+  margin-top: 20px;
+  font-size: 42px;
+  font-weight: bold;
+ 
+}
+
+@media (min-width: 640px) {
+
+.sSection.left {
+  width: 100%;
+
+}
+
+.sSection.right{
+  display: none;
+
+}
+
+
+}
+
+@media (min-width: 1024px) {
+
+.sSection.left {
+  width: 50%;
+
+}
+
+.sSection.right{
+  display: block;
+
+}
+
+
+}
+
+
+
+
+@media (min-width: 1024px) {
+
+
+
+
 }
