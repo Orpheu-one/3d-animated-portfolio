@@ -180,7 +180,7 @@ const Hero = () => {
         <Suspense fallback={null}>
           <NeuralBg />
         </Suspense>
-        <div className="avatar"><img src="/avatar_Paulo.png" alt="" /></div>
+        <div className="avatar"><img src="/avatar_Paulo_001.png" alt="" /></div>
       </div>
 
     </motion.div>

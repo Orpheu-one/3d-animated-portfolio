@@ -1,5 +1,12 @@
+import { motion } from "framer-motion";
 import ComputerModelContainer from "./computer/ComputerModelContainer";
 import "./services.css";
+
+// ─── Timeline ────────────────────────────────────────────────────────────────
+//  0.0s  título entra   (dur 1.0s)
+//  1.2s  card 1 entra   (dur 0.8s)
+//  2.0s  card 2 entra   (dur 0.8s)
+//  2.8s  card 3 entra   (dur 0.8s)
 
 const items = [
   {
@@ -28,15 +35,48 @@ const items = [
   },
 ];
 
+// ─── Variantes ────────────────────────────────────────────────────────────────
+const fromLeft = (delay, duration = 0.8) => ({
+  hidden:  { x: -80, opacity: 0 },
+  visible: {
+    x: 0,
+    opacity: 1,
+    transition: { delay, duration, ease: "easeInOut" },
+  },
+})
+
 const Services = () => {
   return (
-    <div className="services">
+    <motion.div
+      className="services"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: false, amount: 0.2 }}
+    >
       <div className="sSection left">
-        <h1 className="sTitle">How can I help?</h1>
+
+        {/* Título entra primeiro */}
+        <motion.h1 className="sTitle" variants={fromLeft(0, 1.0)}>
+          How can I help?
+        </motion.h1>
 
         <div className="sLeftC">
-          {items.map((item) => (
-            <div key={item.id} className="serviceItem">
+
+          {items.map((item, index) => (
+            <motion.div
+              key={item.id}
+              className="serviceItem"
+              // ── Entrada sequencial ──────────────────────────────────────
+              variants={fromLeft(1.2 + index * 0.8)}
+              // ── Hover: desloca direita + border verde claro + shadow ───
+              whileHover={{
+                x: 12,
+                boxShadow: "4px 4px 20px rgba(21, 237, 122, 0.25)",
+                borderColor: "#15ed7a",
+                transition: { duration: 0.25, ease: "easeOut" },
+              }}
+              style={{ cursor: "pointer" }}
+            >
               <a href={item.link} className="serviceLink">
 
                 <div
@@ -55,21 +95,24 @@ const Services = () => {
                   <h2 className="serviceTitle">{item.title}</h2>
                   <h3 className="serviceDescription">{item.description}</h3>
                 </div>
+
               </a>
-            </div>
+            </motion.div>
           ))}
 
           <div className="counters">
             <div className="counter_1">+100</div>
             <div className="counter_2">+200</div>
           </div>
+
         </div>
       </div>
 
       <div className="sSection right">
         <ComputerModelContainer />
       </div>
-    </div>
+
+    </motion.div>
   );
 };
 
