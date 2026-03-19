@@ -592,3 +592,75 @@ gap: 8px;
 }
 
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   HERO.CSS  —  adiciona APENAS os overrides dark mode em baixo.
+   Cola isto no FIM do teu hero.css existente.
+   ─────────────────────────────────────────────────────────────────────────────
+
+   Paleta dark:
+     --red:     #e11d48
+     --gray:    #737373   (neutral-500)
+     --black:   #000000
+     --white:   #ffffff
+   ───────────────────────────────────────────────────────────────────────────── */
+
+
+/* ── Tipografia H1 ── */
+html[data-theme="dark"] .hTitle {
+  color: #fa0606ff;                          /* verde → vermelho */
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+}
+
+/* "I'm Orpheu!" — era branco, agora preto (bg branco) */
+html[data-theme="dark"] .hName {
+  color: white;
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+}
+
+/* ── Awards block ── */
+html[data-theme="dark"] .awards .aTitle {
+  color: #000000;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+/* "Fullstack" span — era roxo, agora cinza neutral-500 */
+html[data-theme="dark"] .awards span {
+  color: #737373;
+}
+
+/* "Web Developer" — era branco bold, agora preto */
+html[data-theme="dark"] .awards .aTitle span[style] {
+  color: #000000 !important;
+}
+
+/* Parágrafo de descrição */
+html[data-theme="dark"] .aDesc {
+  color: #737373;
+}
+
+/* ── Follow sidebar ── */
+html[data-theme="dark"] .follow {
+  background-color: #0a0000;              /* quase preto com toque vermelho */
+}
+
+html[data-theme="dark"] .followText {
+  background-color: #fb090dff;             /* verde → vermelho */
+  color: #ffffff;
+}
+
+/* ── Certificado ── */
+html[data-theme="dark"] .certificate {
+  color: #737373;
+}
+
+/* ── Avatar — remove mix-blend-mode:screen em bg branco ── */
+html[data-theme="dark"] .avatar img {
+  mix-blend-mode: normal;
+}
+
+/* ── Hover do contactBtn ── */
+html[data-theme="dark"] .contactBtn:hover .mainCircle {
+  stroke: #f80404ff;
+}
+

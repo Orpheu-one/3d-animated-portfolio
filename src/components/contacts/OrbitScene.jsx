@@ -8,7 +8,7 @@ import * as THREE from 'three';
 const NEON_GREEN   = '#15ed7a';    // wireframe color
 const ORBIT_SPEED  = 0.5;         // rad/s — orbit speed
 const ORBIT_TILT   = Math.PI;     // rad   — X-axis tilt (PI = 180deg, flat XZ plane)
-const ORBIT_RADIUS = 5;         // units — orbit radius
+const ORBIT_RADIUS = 10;         // units — orbit radius
 const RING_OPACITY = 0.35;        // 0-1   — orbit ring opacity
 const RING_TUBE_R  = 0.0;       // units — ring tube thickness
 const RING_SEGS    = 128;         // int   — ring smoothness

@@ -39,12 +39,12 @@ h1.sTitle {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  background-color: #f2eff333;
+  background-color: transparent;
   padding: 30px;
   border-radius: 10px;
   width: 80%;
   /* border verde escuro base — o hover é controlado pelo Framer via style */
-  border: 1px solid #073203ff;
+  border: 1px solid #15ed7aff;
   color: black;
 }
 
@@ -84,13 +84,14 @@ h1.sTitle {
 .serviceTitle {
   font-size: 30px;
   margin-top: 10px;
-  color: black;
-  font-weight: 300;
+  color: white;
+  font-weight: 400;
 }
 
 .serviceDescription {
   font-size: 18px;
   color: white;
+  font-weight: 400;
 }
 
 .sSection.left .counters {
@@ -100,7 +101,7 @@ h1.sTitle {
   justify-content: space-between;
   margin-top: 20px;
   padding: 20px;
-  color: #b302f9ff;
+  color: #a1a0a1ff;
 }
 
 .sLeftC .counters {

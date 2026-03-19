@@ -1,60 +1,55 @@
+// src/components/hero/Hero.jsx
 import { Facebook, Instagram, Linkedin } from "lucide-react"
 import "./hero.css"
-import Speech from "./Speech"
+import Speech    from "./Speech"
 import { Suspense } from "react"
 import { motion } from "framer-motion"
-import NeuralBg from "./Neuralbg"
+import NeuralBg     from "./Neuralbg"
+import NeuralBgDark from "./NeuralBgDark"
+import { useTheme } from "../../context/ThemeContext"
 
-// ——— Timeline ——————————————————————————————————————————————————————————————
+// ─── Timeline ─────────────────────────────────────────────────────────────────
 const speed = 0.8
 
-const T1   = 0   * speed   // "Hye There,"
-const T2   = 1.5 * speed   // "I'm Paulo!"
-const T3   = 3.0 * speed   // awards block
-const T3_1 = 3.2 * speed   // "Fullstack"
-const T4   = 4.2 * speed   // "Web Dev"
-const T5   = 5.2 * speed   // parágrafo
-const I1   = 6.2 * speed   // img 1
-const I2   = 6.7 * speed   // img 2
-const I3   = 7.2 * speed   // img 3 — fim lado esquerdo
+const T1   = 0   * speed
+const T2   = 1.5 * speed
+const T3   = 3.0 * speed
+const T3_1 = 3.2 * speed
+const T4   = 4.2 * speed
+const T5   = 5.2 * speed
+const I1   = 6.2 * speed
+const I2   = 6.7 * speed
+const I3   = 7.2 * speed
 
-// Lado direito
-const R          = I3
-const FOLLOW_DUR = 1.2 * speed
-const FOLLOW_ROT = 1.0 * speed
-
-// Speech arranca assim que o followText terminar de rodar
+const R            = I3
+const FOLLOW_DUR   = 1.2 * speed
+const FOLLOW_ROT   = 1.0 * speed
 const SPEECH_DELAY = R + FOLLOW_DUR + FOLLOW_ROT
-
-// Botão de contacto — após Speech (~1.2s de anim do Speech)
 const BUTTON_DELAY = SPEECH_DELAY + 0.55 + 0.65 + 0.3
 
-// ——— Hero ——————————————————————————————————————————————————————————————————————
+// ─── Hero ──────────────────────────────────────────────────────────────────────
 const Hero = () => {
+  const { isDark } = useTheme()
+
+  const circleAccent = isDark ? "#fa0505ff" : "#15ed7aff"
+  const avatarSrc    = isDark ? "/avatar_Paulo_dark_mode_001.png" : "/avatar_Paulo_001.png"
 
   const fromLeft = (delay, duration = 1.2) => ({
     hidden:  { x: -100, opacity: 0 },
-    visible: {
-      x: 0, opacity: 1,
-      transition: { delay, duration: duration * speed, ease: "easeInOut" },
-    },
+    visible: { x: 0, opacity: 1,
+      transition: { delay, duration: duration * speed, ease: "easeInOut" } },
   })
 
   const fadeIn = (delay, duration = 0.4) => ({
     hidden:  { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { delay, duration, ease: "easeInOut" },
-    },
+    visible: { opacity: 1,
+      transition: { delay, duration, ease: "easeInOut" } },
   })
 
   const contactBtnEntry = {
     hidden:  { opacity: 0, clipPath: "circle(0% at 50% 50%)" },
-    visible: {
-      opacity: 1,
-      clipPath: "circle(100% at 50% 50%)",
-      transition: { delay: BUTTON_DELAY, duration: 2.2, ease: "easeInOut" },
-    },
+    visible: { opacity: 1, clipPath: "circle(100% at 50% 50%)",
+      transition: { delay: BUTTON_DELAY, duration: 2.2, ease: "easeInOut" } },
   }
 
   return (
@@ -65,14 +60,14 @@ const Hero = () => {
       viewport={{ once: false, amount: 0.3 }}
     >
 
-      {/* —— LEFT —— */}
+      {/* ── LEFT ── */}
       <div className="hSection left">
         <h1 className="hTitle">
           <motion.span style={{ display: "block" }} variants={fromLeft(T1)}>
-            Hye There,
+            {isDark ? "Welcome into the void," : "Hye There,"}
           </motion.span>
           <motion.span className="hName" style={{ display: "block" }} variants={fromLeft(T2)}>
-            I'm Paulo!
+            {isDark ? "I'm Orpheu!" : "I'm Paulo!"}
           </motion.span>
         </h1>
 
@@ -95,17 +90,16 @@ const Hero = () => {
           </motion.p>
 
           <div className="awardList">
-            <motion.img src="/Nextjs.webp"  className="awardImg"   alt="Next.js"   variants={fadeIn(I1)} />
-            <motion.img src="/React19.png"  className="awardImg_2" alt="React 19"  variants={fadeIn(I2)} />
-            <motion.img src="/wp.png"       className="awardImg_3" alt="WordPress" variants={fadeIn(I3)} />
+            <motion.img src="/Nextjs.webp" className="awardImg"   alt="Next.js"   variants={fadeIn(I1)} />
+            <motion.img src="/React19.png" className="awardImg_2" alt="React 19"  variants={fadeIn(I2)} />
+            <motion.img src="/wp.png"      className="awardImg_3" alt="WordPress" variants={fadeIn(I3)} />
           </div>
         </motion.div>
       </div>
 
-      {/* —— RIGHT —— */}
+      {/* ── RIGHT ── */}
       <div className="hSection right">
 
-        {/* Follow */}
         <motion.div
           className="follow"
           variants={{
@@ -117,7 +111,6 @@ const Hero = () => {
           <a href="/" className="fLink"><Facebook /></a>
           <a href="/" className="fLink"><Instagram /></a>
           <a href="/" className="fLink"><Linkedin /></a>
-
           <motion.div
             className="followTextContainer"
             variants={{
@@ -130,16 +123,13 @@ const Hero = () => {
           </motion.div>
         </motion.div>
 
-        {/* Speech — delay calculado a partir do fim do followText */}
         <Speech delay={SPEECH_DELAY} />
 
-        {/* Certificado */}
         <motion.div className="certificate" variants={fadeIn(SPEECH_DELAY + 0.3)}>
           <img src="/passaporte_qualifica_Logo_001.png" className="cImg" alt="Certificado" />
           CERTIFIED PROFESSIONAL
         </motion.div>
 
-        {/* Botão contacto */}
         <motion.a
           href="#contacts"
           className="contactBtn"
@@ -153,7 +143,7 @@ const Hero = () => {
             style={{ pointerEvents: "none" }}
           >
             <svg viewBox="0 0 200 200" width="150" height="150">
-              <circle className="mainCircle" cx="100" cy="100" r="90" fill="#15ed7aff" />
+              <circle className="mainCircle" cx="100" cy="100" r="90" fill={circleAccent} />
               <path id="innerCirclePath" fill="none"
                 d="M 100,100 m -60,0 a 60,60 0 1,1 120,0 a 60,60 0 1,1 -120,0" />
               <text className="circleText">
@@ -175,12 +165,14 @@ const Hero = () => {
 
       </div>
 
-      {/* —— BG —— */}
+      {/* ── BG: NeuralBg normal OU NeuralBgDark ─────────────────────────────── */}
       <div className="bg">
         <Suspense fallback={null}>
-          <NeuralBg />
+          {isDark ? <NeuralBgDark /> : <NeuralBg />}
         </Suspense>
-        <div className="avatar"><img src="/avatar_Paulo_001.png" alt="" /></div>
+        <div className="avatar">
+          <img src={avatarSrc} alt="" />
+        </div>
       </div>
 
     </motion.div>

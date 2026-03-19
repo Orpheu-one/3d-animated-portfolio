@@ -2,18 +2,28 @@ import { useState } from "react";
 import "./contacts.css";
 import { motion } from "framer-motion";
 import OrbitScene from './OrbitScene';
+import FeedbackModal from './FeedbackModal';
 
 const Contacts = () => {
   const [status, setStatus] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulação de envio para validação
-    const success = Math.random() > 0.5; 
+    
+    // MODO DE TESTE: Forçamos o sucesso para ver o Modal
+    const success = true; 
 
     if (success) {
-      setStatus("A mensagem foi enviada com sucesso!");
-      e.target.reset(); // Limpa o form após sucesso
+      setStatus("Validando dados...");
+      
+      // Pequeno delay para sentires o clique antes do modal saltar
+      setTimeout(() => {
+        setStatus("A mensagem foi enviada com sucesso!");
+        setIsModalOpen(true); // AGORA O MODAL ABRE
+        e.target.reset(); // Limpa o form
+      }, 800);
+
     } else {
       setStatus("Algo correu mal. Tente outra vez.");
     }
@@ -29,8 +39,8 @@ const Contacts = () => {
           
           <form className="sLeftC form-flex" onSubmit={handleSubmit}>
             <div className="field-group">
-              <label htmlFor="nome">Nome</label>
-              <input id="nome" type="text" placeholder="O teu nome" className="form-input" required />
+              <label htmlFor="nome">Name</label>
+              <input id="nome" type="text" placeholder="Your name" className="form-input" required />
             </div>
             
             <div className="field-group">
@@ -39,13 +49,13 @@ const Contacts = () => {
             </div>
 
             <div className="field-group">
-              <label htmlFor="phone">Telefone</label>
+              <label htmlFor="phone">Phone</label>
               <input id="phone" type="tel" placeholder="+351 ..." className="form-input" />
             </div>
 
             <div className="field-group">
-              <label htmlFor="mensagem">Mensagem</label>
-              <textarea id="mensagem" placeholder="Como posso ajudar?" rows="5" className="form-input" required></textarea>
+              <label htmlFor="mensagem">Message</label>
+              <textarea id="mensagem" placeholder="How can I help?" rows="5" className="form-input" required></textarea>
             </div>
 
             <motion.button 
@@ -57,17 +67,17 @@ const Contacts = () => {
             </motion.button>
 
             {status && (
-              <p className={`form-status ${status.includes("sucesso") ? "success" : "error"}`}>
+              <p className={`form-status ${status.includes("sucesso") || status.includes("Validando") ? "success" : "error"}`}>
                 {status}
               </p>
             )}
           </form>
         </div>
 
-        {/* LADO DIREITO: AVATAR */}
+        {/* LADO DIREITO: AVATAR + R3F */}
         <div className="sSection right">
-          .<div className="wrapper">
-          <OrbitScene />
+          <div className="wrapper">
+            <OrbitScene />
           </div>
           <div className="img-container-right">
              <img src="/Avatar_contacts.png" alt="Avatar" className="avatar-img" />
@@ -75,6 +85,12 @@ const Contacts = () => {
         </div>
 
       </div>
+
+      {/* COMPONENTE DO MODAL */}
+      <FeedbackModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
     </section>
   );
 };

@@ -47,3 +47,35 @@ section {
 @media (min-width: 1024px) { .container { max-width: 1024px; } }
 @media (min-width: 1280px) { .container { max-width: 1280px; } }
 @media (min-width: 1536px) { .container { max-width: 1536px; } }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   INDEX.CSS  — cola o @import no TOPO do teu index.css,
+                e o bloco dark mode no FUNDO.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* ── [TOPO] Adiciona esta linha mesmo antes de qualquer outro estilo ── */
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   O teu index.css existente fica aqui no meio (não alteras nada).
+   ─────────────────────────────────────────────────────────────────────────────
+
+   * { padding:0; margin:0; box-sizing:border-box; }
+   html { ... }
+   body { ... }
+   etc.
+
+   ───────────────────────────────────────────────────────────────────────────── */
+
+
+/* ── [FUNDO] Dark mode — body background ── */
+html[data-theme="dark"] body {
+  background: #ffffff;                     /* bg branco em dark mode */
+  color: #000000;
+}
+
+/* Transição suave na troca de tema */
+body {
+  transition: background 0.5s ease, color 0.4s ease;
+}
