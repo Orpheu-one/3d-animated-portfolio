@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Teko:wght@400;600;700&display=swap');
+
+
 * {
   padding: 0px;
   margin: 0px;
@@ -71,7 +74,13 @@ section {
 
 /* ── [FUNDO] Dark mode — body background ── */
 html[data-theme="dark"] body {
-  background: #ffffff;                     /* bg branco em dark mode */
+  background: radial-gradient(
+    ellipse at center,
+    #000000  0%,
+    #000000  5%,
+    #393838ff 50%,
+    #4e4c4cff 100%
+  );
   color: #000000;
 }
 
