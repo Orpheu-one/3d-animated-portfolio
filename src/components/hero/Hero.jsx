@@ -4,9 +4,10 @@ import "./hero.css"
 import Speech from "./Speech"
 import { Suspense } from "react"
 import { motion } from "framer-motion"
-import NeuralBg     from "./Neuralbg"
+import Neuralbg     from "./Neuralbg"
 import NeuralBgDark from "./NeuralBgDark"
 import { useTheme } from "../../context/ThemeContext"
+import PsychedelicBackground from './PsychedelicBackground'
 
 // ─── Timeline ─────────────────────────────────────────────────────────────────
 const speed = 0.8
@@ -36,7 +37,7 @@ const Hero = () => {
   const { isDark } = useTheme()
 
   const circleAccent = isDark ? "#fa0505ff" : "#15ed7aff"
-  const avatarSrc    = isDark ? "/avatar_Paulo_dark_mode_001.png" : "/avatar_Paulo_001.png"
+  const avatarSrc    = isDark ? "/avatar_Paulo_dark_mode_001.png" : "/avatar_phychedelic_001.png"
 
   const fromLeft = (delay, duration = 1.2) => ({
     hidden:  { x: -100, opacity: 0 },
@@ -372,10 +373,18 @@ const Hero = () => {
       {/* ── BG ── */}
       <div className="bg">
         <Suspense fallback={null}>
-          {isDark ? <NeuralBgDark /> : <NeuralBg />}
+          <div className="relative w-full h-screen bg-black overflow-hidden">
+      {/* Camada 1: O Shader Psicadélico (Fundo Profundo) */}
+      <PsychedelicBackground /></div>
+          {isDark ? <NeuralBgDark /> : <Neuralbg />}
         </Suspense>
         <div className="avatar">
-          <img src={avatarSrc} alt="" />
+          {/*<img src={avatarSrc} alt="" />*/}
+          <img
+  src={avatarSrc}
+  alt=""
+  style={!isDark ? { mixBlendMode: 'screen' } : undefined}
+/>
         </div>
       </div>
 
