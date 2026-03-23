@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Teko:wght@400;600;700&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
+
 
 * {
   padding: 0px;
@@ -78,6 +80,39 @@ html[data-theme="dark"] body {
     ellipse at center,
     #000000  0%,
     #000000  5%,
+    #393838ff 50%,
+    #4e4c4cff 100%
+  );
+  color: #000000;
+}
+
+/* Transição suave na troca de tema */
+body {
+  transition: background 0.5s ease, color 0.4s ease;
+}
+
+
+
+
+/* ── Uno: body transparente, Fredoka, cores vibrantes ────────────────────────── */
+html[data-theme="uno"] body {
+  background:  transparent;
+  color:       #1a1a2e;
+  font-family: 'Fredoka', 'Roboto', sans-serif;
+  transition:  background 0.5s ease, color 0.4s ease;
+}
+
+/* Sections também transparentes em uno */
+html[data-theme="uno"] section {
+  background: transparent;
+}
+
+/* ── Dark mode body (já tinhas, mantido aqui por completude) ─────────────────── */
+html[data-theme="dark"] body {
+  background: radial-gradient(
+    ellipse at center,
+    #000000 0%,
+    #000000 5%,
     #393838ff 50%,
     #4e4c4cff 100%
   );

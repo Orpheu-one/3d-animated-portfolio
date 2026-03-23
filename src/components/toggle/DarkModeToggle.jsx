@@ -1,111 +1,103 @@
 // src/components/toggle/DarkModeToggle.jsx
-import { useState } from "react"
+import { motion } from "framer-motion"
+import { useTheme } from "../../context/ThemeContext"
 
-// ─── Palettes ─────────────────────────────────────────────────────────────────
-const THEMES = {
-  normal: {
-    trackBg:     "#1e2d3d",
-    trackBorder: "#4ade8066",
-    knobBg:      "#4ade80",
-    knobShadow:  "0 0 12px #4ade80cc, 0 0 28px #4ade8066",
-    labelColor:  "#4ade80",
-    label:       "NORMAL",
-  },
-  dark: {
-    trackBg:     "#1a0000",
-    trackBorder: "#e11d4866",
-    knobBg:      "#e11d48",
-    knobShadow:  "0 0 12px #e11d48cc, 0 0 28px #e11d4866",
-    labelColor:  "#e11d48",
-    label:       "DARK",
-  },
-}
+const THEMES = [
+  { key: "light", label: "NORMAL", emoji: "🌿", color: "#4ade80" },
+  { key: "dark",  label: "DARK",   emoji: "🌑", color: "#e11d48" },
+  { key: "uno",   label: "UNO",    emoji: "🌈", color: "#f9a8d4" },
+]
 
-const SunIcon = ({ color }) => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-    <circle cx="12" cy="12" r="5" fill={color} />
-    {[0,45,90,135,180,225,270,315].map(a => (
-      <line key={a}
-        x1={12 + 8.5 * Math.cos(a * Math.PI / 180)}
-        y1={12 + 8.5 * Math.sin(a * Math.PI / 180)}
-        x2={12 + 11  * Math.cos(a * Math.PI / 180)}
-        y2={12 + 11  * Math.sin(a * Math.PI / 180)}
-        stroke={color} strokeWidth="2" strokeLinecap="round"
-      />
-    ))}
-  </svg>
-)
+const DarkModeToggle = () => {
+  const { theme, setTheme } = useTheme()
+  const idx    = Math.max(0, THEMES.findIndex(t => t.key === theme))
+  const active = THEMES[idx]
 
-const MoonIcon = ({ color }) => (
-  <svg width="13" height="13" viewBox="0 0 24 24" fill={color}>
-    <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" />
-  </svg>
-)
-
-// ─── Component ────────────────────────────────────────────────────────────────
-export const DarkModeToggle = ({ onChange }) => {
-  const [isDark, setIsDark] = useState(false)
-  const t = THEMES[isDark ? "dark" : "normal"]
-
-  const toggle = () => {
-    const next = !isDark
-    setIsDark(next)
-    onChange?.(next)
-  }
+  const cycle = () => setTheme(THEMES[(idx + 1) % THEMES.length].key)
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, userSelect: "none" }}>
-
-      {/* Sun */}
-      <span style={{ opacity: isDark ? 0.3 : 1, transition: "opacity 0.4s", display: "flex", alignItems: "center" }}>
-        <SunIcon color={THEMES.normal.knobBg} />
-      </span>
-
-      {/* Track */}
-      <button
-        onClick={toggle}
-        aria-label="Toggle dark mode"
-        style={{
-          position: "relative",
-          width: 52, height: 28,
-          borderRadius: 14,
-          background: t.trackBg,
-          border: `1.5px solid ${t.trackBorder}`,
-          cursor: "pointer",
-          padding: 0,
-          outline: "none",
-          transition: "background 0.45s ease, border-color 0.45s ease",
-        }}
-      >
-        <span style={{
-          position: "absolute",
-          top: 3,
-          left: isDark ? 25 : 3,
-          width: 20, height: 20,
-          borderRadius: "50%",
-          background: t.knobBg,
-          boxShadow: t.knobShadow,
-          transition: "left 0.4s cubic-bezier(0.34,1.56,0.64,1), background 0.4s ease, box-shadow 0.4s ease",
-        }} />
-      </button>
-
-      {/* Moon */}
-      <span style={{ opacity: isDark ? 1 : 0.3, transition: "opacity 0.4s", display: "flex", alignItems: "center" }}>
-        <MoonIcon color={THEMES.dark.knobBg} />
-      </span>
+    <div style={{
+      display:    "flex",
+      alignItems: "center",
+      gap:        "10px",
+      userSelect: "none",
+    }}>
 
       {/* Label */}
       <span style={{
-        fontFamily: "'Share Tech Mono', 'Courier New', monospace",
-        fontSize: 10,
-        letterSpacing: "0.15em",
-        color: t.labelColor,
-        transition: "color 0.4s",
-        minWidth: 48,
+        fontSize:      "11px",
+        fontWeight:    700,
+        letterSpacing: "0.12em",
+        color:         active.color,
+        minWidth:      "52px",
+        textAlign:     "right",
+        transition:    "color 0.3s ease",
       }}>
-        {t.label}
+        {active.label}
       </span>
 
+      {/* Track */}
+      <div
+        onClick={cycle}
+        style={{
+          position:     "relative",
+          width:        "76px",
+          height:       "30px",
+          borderRadius: "15px",
+          background:   theme === "dark" ? "#3f0a14"
+                      : theme === "uno"  ? "rgba(249,168,212,0.25)"
+                      :                   "#14532d",
+          border:       `1px solid ${active.color}55`,
+          cursor:       "pointer",
+          transition:   "background 0.3s ease, border-color 0.3s ease",
+        }}
+      >
+        {/* Knob animado */}
+        <motion.div
+          animate={{ x: idx * 24 + 3 }}
+          transition={{ type: "spring", stiffness: 400, damping: 28 }}
+          style={{
+            position:        "absolute",
+            top:             "3px",
+            width:           "24px",
+            height:          "24px",
+            borderRadius:    "50%",
+            background:      active.color,
+            boxShadow:       `0 0 8px ${active.color}88`,
+            display:         "flex",
+            alignItems:      "center",
+            justifyContent:  "center",
+            fontSize:        "13px",
+            pointerEvents:   "none",
+          }}
+        >
+          {active.emoji}
+        </motion.div>
+
+        {/* 3 pontos indicadores */}
+        {THEMES.map((t, i) => (
+          <div
+            key={t.key}
+            style={{
+              position:     "absolute",
+              top:          "50%",
+              left:         `${i * 24 + 15}px`,
+              transform:    "translate(-50%, -50%)",
+              width:        "4px",
+              height:       "4px",
+              borderRadius: "50%",
+              background:   idx === i ? "transparent" : "rgba(255,255,255,0.3)",
+              transition:   "background 0.2s",
+              pointerEvents: "none",
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Hint — próximo tema */}
+      <span style={{ fontSize: "13px", opacity: 0.45 }}>
+        {THEMES[(idx + 1) % THEMES.length].emoji}
+      </span>
     </div>
   )
 }

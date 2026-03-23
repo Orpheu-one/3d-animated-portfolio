@@ -1,16 +1,15 @@
 // src/App.jsx
-import Contacts from "./components/contacts/Contacts"
-import Hero     from "./components/hero/Hero"
-import Portfolio from "./components/portfolio/Portfolio"
-import Services  from "./components/services/Services"
+import Contacts    from "./components/contacts/Contacts"
+import Hero        from "./components/hero/Hero"
+import Portfolio   from "./components/portfolio/Portfolio"
+import Services    from "./components/services/Services"
 import { ThemeProvider, useTheme } from "./context/ThemeContext"
-import { DarkModeToggle } from "./components/toggle/DarkModeToggle"
+import DarkModeToggle from "./components/toggle/DarkModeToggle"  // ← default, sem {}
 import "./index.css"
 
-// ─── TopNav ──────────────────────────────────────────────────────────────────
-// Fixed bar no topo — não interfere com o scroll-snap das sections
+// ─── TopNav ───────────────────────────────────────────────────────────────────
 const TopNav = () => {
-  const { isDark, setIsDark } = useTheme()
+  const { isDark, isUno } = useTheme()
 
   return (
     <nav
@@ -25,27 +24,25 @@ const TopNav = () => {
         justifyContent: "flex-end",
         padding:        "0 32px",
         zIndex:         1000,
-        // Fundo: translúcido em ambos os modos
-        background: isDark
-          ? "rgba(255,255,255,0.85)"
-          : "rgba(10, 25, 47, 0.75)",
+        background: isDark ? "rgba(255,255,255,0.85)"
+                  : isUno  ? "rgba(255,240,255,0.6)"
+                  :          "rgba(10, 25, 47, 0.75)",
         backdropFilter: "blur(10px)",
-        borderBottom: isDark
-          ? "1px solid #e11d4822"
-          : "1px solid #4ade8022",
+        borderBottom: isDark ? "1px solid #e11d4822"
+                    : isUno  ? "1px solid #f9a8d433"
+                    :          "1px solid #4ade8022",
         transition: "background 0.5s ease, border-color 0.5s ease",
       }}
     >
-      <DarkModeToggle onChange={setIsDark} />
+      <DarkModeToggle />
     </nav>
   )
 }
 
-// ─── Inner App (needs ThemeProvider above) ────────────────────────────────────
+// ─── AppInner ─────────────────────────────────────────────────────────────────
 const AppInner = () => (
   <div className="container">
     <TopNav />
-    {/* padding-top: 52px para que o conteúdo não fique escondido sob a navbar */}
     <section id="welcome"  style={{ paddingTop: 52 }}><Hero /></section>
     <section id="services" ><Services /></section>
     <section id="portfolio"><Portfolio /></section>

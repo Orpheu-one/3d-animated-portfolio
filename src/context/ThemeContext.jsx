@@ -4,15 +4,21 @@ import { createContext, useContext, useState, useEffect } from "react"
 const ThemeContext = createContext()
 
 export const ThemeProvider = ({ children }) => {
-  const [isDark, setIsDark] = useState(false)
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem("app-theme") || "light"
+  )
 
-  // Aplica data-theme no <html> → CSS selectors funcionam globalmente
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light")
-  }, [isDark])
+    document.documentElement.setAttribute("data-theme", theme)
+    localStorage.setItem("app-theme", theme)
+  }, [theme])
+
+  // isDark mantido para retrocompatibilidade com todo o código existente
+  const isDark = theme === "dark"
+  const isUno  = theme === "uno"
 
   return (
-    <ThemeContext.Provider value={{ isDark, setIsDark }}>
+    <ThemeContext.Provider value={{ theme, setTheme, isDark, isUno }}>
       {children}
     </ThemeContext.Provider>
   )
