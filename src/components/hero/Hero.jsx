@@ -1,13 +1,15 @@
 // src/components/hero/Hero.jsx
+
 import { Facebook, Instagram, Linkedin } from "lucide-react"
 import "./hero.css"
 import Speech from "./Speech"
-import { Suspense } from "react"
+import { Suspense, useState } from "react"
 import { motion } from "framer-motion"
-import Neuralbg          from "./Neuralbg"
-import NeuralBgDark      from "./NeuralBgDark"
+import Neuralbg from "./Neuralbg"
+import NeuralbgOriginal from "./Neuralbg_original"
+import NeuralBgDark from "./NeuralBgDark"
 import PsychedelicBackground from "./PsychedelicBackground"
-import { useTheme }      from "../../context/ThemeContext"
+import { useTheme } from "../../context/ThemeContext"
 
 // ─── Timeline ─────────────────────────────────────────────────────────────────
 const speed = 0.8
@@ -30,9 +32,10 @@ const BTN_HALF = BTN / 2
 
 // ─── Hero ──────────────────────────────────────────────────────────────────────
 const Hero = () => {
-  const { isDark, isUno } = useTheme()
 
-  // ── Avatar: nome correcto de cada ficheiro ─────────────────────────────────
+  const { isDark, isUno } = useTheme()
+  const [morteHover, setMorteHover] = useState(false)
+
   const avatarSrc = isDark ? "/avatar_Paulo_dark_mode_001.png"
                   : isUno  ? "/avatar_phychedelic_001.png"
                   :          "/avatar_Paulo_001.png"
@@ -85,8 +88,16 @@ const Hero = () => {
             variants={fromLeft(T2)}
           >
             {isDark ? "I'm Orpheu!"
-           : isUno  ? "I'm Little Paulo! 🎈"
-           :          "I'm Paulo!"}
+           : isUno  ? (
+               <span style={{
+                 fontFamily:       "'Fredoka', sans-serif",
+                 fontWeight:       700,
+                 color:            "#ff00ff",
+                 WebkitTextStroke: "4px white",
+                 paintOrder:       "stroke fill",
+               }}>I'm UNO</span>
+             )
+           : "I'm Paulo!"}
           </motion.span>
         </h1>
 
@@ -129,9 +140,9 @@ const Hero = () => {
       </div>
 
       {/* ── RIGHT ── */}
-      <div className="hSection right">
+      <div className={`hSection right ${isDark ? "right--dark" : ""}`}>
 
-        {/* ── NORMAL follow — intacto ── */}
+        {/* NORMAL follow */}
         {!isDark && !isUno && (
           <motion.div
             className="follow"
@@ -157,7 +168,7 @@ const Hero = () => {
           </motion.div>
         )}
 
-        {/* ── UNO follow ── */}
+        {/* UNO follow */}
         {isUno && (
           <motion.div
             className="follow follow--uno"
@@ -183,7 +194,7 @@ const Hero = () => {
           </motion.div>
         )}
 
-        {/* ── DARK follow — intacto ── */}
+        {/* DARK follow */}
         {isDark && (
           <motion.div
             className="follow follow--dark"
@@ -196,7 +207,7 @@ const Hero = () => {
                 fontFamily:    "'Teko', 'Share Tech Mono', monospace",
                 fontSize:      "22px", fontWeight: 600, color: "#ffffff",
                 letterSpacing: "0.15em", textTransform: "uppercase",
-                lineHeight: 1, paddingTop: "6px",
+                lineHeight:    1, paddingTop: "6px",
               }}>to</span>
               <span className="follow__darkLabel">FOLLOW</span>
             </div>
@@ -211,9 +222,30 @@ const Hero = () => {
           </motion.div>
         )}
 
-        <Speech delay={SPEECH_DELAY} />
+        {/* Imagem morte (dark) ou Speech (normal/uno) */}
+        {isDark ? (
+          <motion.img
+            src={morteHover ? "/morte_001_red_800.jpg" : "/morte_001_black.jpg"}
+            alt="morte"
+            variants={fadeIn(SPEECH_DELAY, 0.8)}
+            onMouseEnter={() => setMorteHover(true)}
+            onMouseLeave={() => setMorteHover(false)}
+            style={{
+              mixBlendMode: "multiply",
+              width:        "50%",
+              maxWidth:     "50%",
+              display:      "block",
+              marginLeft:   "auto",
+              alignSelf:    "flex-end",
+              transition:   "opacity 0.3s ease",
+              marginTop:    "20px",
+            }}
+          />
+        ) : (
+          <Speech delay={SPEECH_DELAY} />
+        )}
 
-        {/* ── Certificate ── */}
+        {/* Certificate */}
         <motion.div
           className="certificate"
           variants={fadeIn(SPEECH_DELAY + 0.3)}
@@ -237,7 +269,7 @@ const Hero = () => {
           }
         </motion.div>
 
-        {/* ── Contact Button ── */}
+        {/* Contact Button */}
         <motion.a
           href="#contacts"
           className="contactBtn"
@@ -277,7 +309,7 @@ const Hero = () => {
             </motion.div>
           )}
 
-          {/* Dark — intacto */}
+          {/* Dark */}
           {isDark && (
             <div className="contactButtonContainer" style={{ position:"relative", width:BTN, height:BTN, pointerEvents:"none" }}>
               <motion.div
@@ -308,8 +340,13 @@ const Hero = () => {
       <div className="bg">
         <Suspense fallback={null}>
           {isDark ? <NeuralBgDark />
-         : isUno  ? <PsychedelicBackground />
-         :          <Neuralbg />}
+         : isUno  ? (
+             <>
+               <PsychedelicBackground />
+               <Neuralbg />
+             </>
+           )
+         : <NeuralbgOriginal />}
         </Suspense>
         <div className="avatar">
           <img

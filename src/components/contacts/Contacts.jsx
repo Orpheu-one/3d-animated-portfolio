@@ -1,3 +1,5 @@
+// src/components/contacts/Contacts.jsx
+
 import { useState } from "react";
 import "./contacts.css";
 import { motion } from "framer-motion";
@@ -7,6 +9,9 @@ import FeedbackModal from './FeedbackModal';
 const Contacts = () => {
   const [status, setStatus] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Variável para armazenar o nome do utilizador (User_Name)
+  const [userName, setUserName] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,8 +25,8 @@ const Contacts = () => {
       // Pequeno delay para sentires o clique antes do modal saltar
       setTimeout(() => {
         setStatus("A mensagem foi enviada com sucesso!");
-        setIsModalOpen(true); // AGORA O MODAL ABRE
-        e.target.reset(); // Limpa o form
+        setIsModalOpen(true); 
+        // e.target.reset(); // Comentado para não limpar o userName antes de processares
       }, 800);
 
     } else {
@@ -30,17 +35,29 @@ const Contacts = () => {
   };
 
   return (
-    <section className="services">
+    <section className="services" style={{ position: "relative", zIndex: 5 }}>
       <div className="container contacts-wrapper">
         
         {/* LADO ESQUERDO: FORMULÁRIO */}
-        <div className="sSection left">
+        <div className="sSection left" style={{ position: "relative", zIndex: 10 }}>
           <h1 className="sTitle">Contact me</h1>
           
-          <form className="sLeftC form-flex" onSubmit={handleSubmit}>
+          <form 
+            className="sLeftC form-flex" 
+            onSubmit={handleSubmit}
+            style={{ pointerEvents: "auto" }} // Garante que aceita cliques
+          >
             <div className="field-group">
               <label htmlFor="nome">Name</label>
-              <input id="nome" type="text" placeholder="Your name" className="form-input" required />
+              <input 
+                id="nome" 
+                type="text" 
+                placeholder="Your name" 
+                className="form-input" 
+                required 
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+              />
             </div>
             
             <div className="field-group">
@@ -59,9 +76,11 @@ const Contacts = () => {
             </div>
 
             <motion.button 
+              type="submit"
               whileHover={{ scale: 1.02, backgroundColor: "#15ed7aff", color: "#000" }}
               whileTap={{ scale: 0.98 }}
               className="send-btn"
+              style={{ cursor: "pointer" }}
             >
               Enviar Mensagem
             </motion.button>
@@ -75,7 +94,7 @@ const Contacts = () => {
         </div>
 
         {/* LADO DIREITO: AVATAR + R3F */}
-        <div className="sSection right">
+        <div className="sSection right" style={{ zIndex: 1 }}>
           <div className="wrapper">
             <OrbitScene />
           </div>
