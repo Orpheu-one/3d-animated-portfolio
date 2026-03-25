@@ -1,108 +1,62 @@
-import React, { useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { 
-  PerspectiveCamera, 
-  MeshTransmissionMaterial, 
-  Sphere, 
-  Environment, 
-  Float,
-  MeshDistortMaterial, 
-  OrbitControls
-} from "@react-three/drei";
-import * as THREE from "three";
-
 const AlienEgg = () => {
-  const innerRef = useRef();
-  const shellRef = useRef();
-
-  // Animação ligeira para simular vida lá dentro
-  useFrame((state) => {
-    const t = state.clock.getElapsedTime();
-    if (innerRef.current) {
-      innerRef.current.position.y = Math.sin(t * 0.5) * 0.1;
-      innerRef.current.rotation.z = Math.sin(t * 0.3) * 0.1;
-    }
-  });
-
   return (
     <>
-      {/* Iluminação Customizada */}
-      <ambientLight intensity={0.2} />
-      {/* Luz principal à direita (Back scene) */}
-      <pointLight position={[5, 5, -5]} intensity={2} color="#ffffff" />
-      {/* Luz de recorte Verde (Rim light) */}
+      {/* Luzes Globais */}
+      <ambientLight intensity={0.5} /> 
+      
+      {/* Luz de Recorte (Rim Light) - Verde Alien */}
       <spotLight 
-        position={[-5, 2, 2]} 
-        angle={0.3} 
+        position={[-10, 10, 10]} 
+        angle={0.15} 
         penumbra={1} 
-        intensity={3} 
+        intensity={5} 
         color="#15ed7a" 
-        castShadow 
       />
 
-      <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.5}>
-        <group scale={[1, 1.35, 1]}> {/* Formato de Ovo */}
+      <Float speed={1.5} rotationIntensity={0.4} floatIntensity={0.4}>
+        <group scale={[1, 1.35, 1]}> 
           
-          {/* CASCA EXTERIOR (O Ovo) */}
-          <mesh ref={shellRef}>
+          {/* 1. LUZ INTERNA: Faz o ovo brilhar de dentro para fora */}
+          <pointLight position={[0, 0, 0]} intensity={2.5} color="#15ed7a" distance={5} />
+
+          {/* 2. CASCA EXTERIOR (O Ovo) */}
+          <mesh>
             <sphereGeometry args={[1, 64, 64]} />
             <MeshTransmissionMaterial
               backside
-              samples={10}
-              thickness={0.2}
-              chromaticAberration={0.05}
-              anisotropy={0.1}
-              distortion={0.3}
+              samples={16}
+              thickness={0.1} // Reduzi a espessura para ser mais transparente
+              chromaticAberration={0.2}
+              anisotropy={0.3}
+              distortion={0.5}
               distortionScale={0.5}
               temporalDistortion={0.1}
-              color="#2a3b2a"
-              roughness={0.2}
-              transmission={0.95}
-              // Simulando a textura de "veias" ou orgânica
-              normalMap={null} // Aqui poderias carregar um noise map
+              color="#3a4d3a" // Um verde escuro, mas não preto
+              transmission={1.0} // Totalmente transmissivo
+              roughness={0.1} // Mais brilhante/húmido
+              ior={1.2} // Índice de refração (1.2 é perto da água/gel)
+              thickness={0.5}
             />
           </mesh>
 
-          {/* NÚCLEO INTERIOR (A Esfera Deformada) */}
-          <mesh ref={innerRef} position={[0, 0, -0.2]}>
+          {/* 3. NÚCLEO "VIVO" (A Esfera Interior) */}
+          <mesh position={[0, -0.1, 0]}>
             <sphereGeometry args={[0.5, 64, 64]} />
-            <MeshDistortMaterial
-              color="#15ed7a"
-              speed={2}
-              distort={0.3} // Deformação ligeira
+            <MeshDistortMaterial 
+              color="#15ed7a" 
+              speed={4} 
+              distort={0.4} 
               radius={1}
-              emissive="#052b12"
-              roughness={0.4}
+              emissive="#0a3d1a" // Faz a esfera interna emitir luz própria
+              emissiveIntensity={2}
             />
           </mesh>
           
         </group>
       </Float>
 
-      {/* Ambiente para reflexos orgânicos */}
-      <Environment preset="night" />
+      {/* IMPORTANTE: Sem isto, materiais de transmissão ficam pretos em muitas cenas */}
+      <Environment preset="city" /> 
     </>
   );
 };
-
-const AlienEggContainer = () => {
-  return (
-    <div style={{ width: "100%", height: "500px", position: "relative" }}>
-      <Canvas shadows dpr={[1, 2]}>
-        <PerspectiveCamera 
-          makeDefault 
-          position={[0, 0, 5]} 
-          fov={45} 
-        />
-        <color attach="background" args={["#050505"]} />
-        
-        <AlienEgg />
-        <OrbitControls/> {/* Permite interação, pode ser removido para desativar */}
-        
-        {/* Desativamos o Zoom e controlamos a interação se necessário */}
-      </Canvas>
-    </div>
-  );
-};
-
-export default AlienEggContainer;
