@@ -1,0 +1,103 @@
+/* src/components/deathclock/deathclock.css */
+
+/* ── Wrapper sobre a imagem morte ────────────────────────────────────────────── */
+.throne-display-wrapper {
+  position:        absolute;
+  width:           100%;
+  bottom:          0;
+  left:            0;
+  pointer-events:  none;
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  padding-bottom:  8%;
+  z-index:         20;             /* ← acima do NeuralBgDark canvas (z:0) */
+}
+
+/* ── Degrau de cima: nome + CTA ──────────────────────────────────────────────── */
+.step-top-content {
+  text-align:    center;
+  margin-bottom: 10px;
+}
+
+.orpheu-label {
+  font-family:    'Teko', sans-serif;
+  font-size:      1.1rem;
+  color:          #555;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display:        block;
+  margin-bottom:  2px;
+}
+
+.cta-label {
+  font-family:    'Teko', sans-serif;
+  font-size:      1rem;
+  color:          #fa0505;
+  text-transform: uppercase;
+  pointer-events: auto;           /* ← clicável mesmo com pointer-events:none no pai */
+  animation:      pulse-red 2s infinite;
+  display:        block;
+}
+
+/* ── Degrau de baixo: relógio ────────────────────────────────────────────────── */
+.step-bottom-clock {
+  display:         flex;
+  justify-content: center;
+  align-items:     baseline;
+  gap:             6px;
+  background:      rgba(0,0,0,0.35);
+  padding:         6px 12px;
+  border-radius:   4px;
+  backdrop-filter: blur(4px);
+}
+
+.mini-unit {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  min-width:      32px;
+}
+
+.mini-value {
+  font-family: 'Teko', sans-serif;
+  font-size:   2rem;
+  color:       #ffffff;
+  line-height: 1;
+  text-shadow: 0 0 8px rgba(255,255,255,0.25);
+}
+
+.mini-label {
+  font-size:      0.55rem;
+  text-transform: uppercase;
+  color:          #555;
+  letter-spacing: 0.1em;
+  margin-top:     -2px;
+}
+
+.mini-separator {
+  color:          #fa0505;
+  font-family:    'Teko', sans-serif;
+  font-size:      1.6rem;
+  padding-bottom: 8px;
+  opacity:        0.7;
+}
+
+/* ── Pulse animation ─────────────────────────────────────────────────────────── */
+@keyframes pulse-red {
+  0%,  100% { opacity: 0.5; text-shadow: none; }
+  50%       { opacity: 1;   text-shadow: 0 0 10px rgba(250,5,5,0.8); }
+}
+
+/* ── Ritual overlay (fullscreen) ─────────────────────────────────────────────── */
+.ritual-overlay-fullscreen {
+  position:       fixed;
+  top:            0; left: 0;
+  width:          100vw;
+  height:         100vh;
+  background:     rgba(0,0,0,0.95);
+  z-index:        10000;
+  display:        flex;
+  align-items:    center;
+  justify-content: center;
+}
