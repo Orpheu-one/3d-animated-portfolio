@@ -7,57 +7,62 @@ import Neuralbg from "./Neuralbg"
 import NeuralbgOriginal from "./Neuralbg_original"
 import NeuralBgDark from "./NeuralBgDark"
 import PsychedelicBackground from "./PsychedelicBackground"
-import DeathClock from "../deathclock/DeathClock" 
+import DeathClock from "../deathclock/DeathClock"
 import RitualForm from "../deathclock/RitualForm"
 import { useTheme } from "../../context/ThemeContext"
 
-// ——— Timeline —————————————————————————————————————————————————————————————
+
+// ——— Timeline ————————————————————————————————————————————————————————————————
+
 const speed = 0.8
-const T1   = 0   * speed
-const T2   = 1.5 * speed
-const T3   = 3.0 * speed
+
+const T1 = 0 * speed
+const T2 = 1.5 * speed
+const T3 = 3.0 * speed
 const T3_1 = 3.2 * speed
-const T4   = 4.2 * speed
-const T5   = 5.2 * speed
-const I1   = 6.2 * speed
-const I2   = 6.7 * speed
-const I3   = 7.2 * speed
-const R            = I3
-const FOLLOW_DUR   = 1.2 * speed
-const FOLLOW_ROT   = 1.0 * speed
+const T4 = 4.2 * speed
+const T5 = 5.2 * speed
+const I1 = 6.2 * speed
+const I2 = 6.7 * speed
+const I3 = 7.2 * speed
+const R = I3
+const FOLLOW_DUR = 1.2 * speed
+const FOLLOW_ROT = 1.0 * speed
 const SPEECH_DELAY = R + FOLLOW_DUR + FOLLOW_ROT
 const BUTTON_DELAY = SPEECH_DELAY + 0.55 + 0.65 + 0.3
-const BTN      = 150
+const BTN = 150
 const BTN_HALF = BTN / 2
 
-// ——— Hero ——————————————————————————————————————————————————————————————————————
+
+// ——— Hero ————————————————————————————————————————————————————————————————————
+
 const Hero = () => {
 
   const { isDark, isUno, showRitual, setShowRitual } = useTheme()
   const [morteHover, setMorteHover] = useState(false)
 
   const avatarSrc = isDark ? "/avatar_Paulo_dark_mode_001.png"
-                  : isUno  ? "/avatar_phychedelic_001.png"
-                  :          "/avatar_Paulo_001.png"
+    : isUno ? "/avatar_phychedelic_001.png"
+    : "/avatar_Paulo_001.png"
 
   const circleAccent = isDark ? "#fa0505ff"
-                     : isUno  ? "#f9a8d4"
-                     :          "#15ed7aff"
+    : isUno ? "#f9a8d4"
+    : "#15ed7aff"
 
   const fromLeft = (delay, duration = 1.2) => ({
-    hidden:  { x: -100, opacity: 0 },
+    hidden: { x: -100, opacity: 0 },
     visible: { x: 0, opacity: 1,
       transition: { delay, duration: duration * speed, ease: "easeInOut" } },
   })
 
   const fadeIn = (delay, duration = 0.4) => ({
-    hidden:  { opacity: 0 },
+    hidden: { opacity: 0 },
     visible: { opacity: 1,
       transition: { delay, duration, ease: "easeInOut" } },
   })
 
   const contactBtnEntry = {
-    hidden:  { opacity: 0, clipPath: "circle(0% at 50% 50%)" },
+    hidden: { opacity: 0, clipPath: "circle(0% at 50% 50%)" },
     visible: { opacity: 1, clipPath: "circle(100% at 50% 50%)",
       transition: { delay: BUTTON_DELAY, duration: 2.2, ease: "easeInOut" } },
   }
@@ -78,72 +83,105 @@ const Hero = () => {
 
         {/* —— LEFT —— */}
         <div className="hSection left">
+
           <h1 className="hTitle">
+
             <motion.span style={{ display: "block" }} variants={fromLeft(T1)}>
               {isDark ? "Welcome into the void,"
-             : isUno  ? "Hey hey hey! 🌈"
-             :          "Hye There,"}
+                : isUno ? (
+                  // "Please enter..." em branco + arco-íris ao tamanho das letras
+                  <>
+                    <span style={{ color: "white" }}>Please enter...</span>
+                    {" "}
+                    <span style={{ fontSize: "1em", lineHeight: 1 }}>🌈</span>
+                  </>
+                )
+                : "Hye There,"}
             </motion.span>
+
             <motion.span
               className="hName"
               style={{
-                display:    "block",
-                color:      isDark ? "#000000" : undefined,
+                display: "block",
+                color: isDark ? "#000000" : undefined,
                 fontWeight: isDark ? 900 : undefined,
               }}
               variants={fromLeft(T2)}
             >
               {isDark ? "I'm Orpheu!"
-             : isUno  ? (
-                 <span style={{
-                   fontFamily:       "'Fredoka', sans-serif",
-                   fontWeight:       700,
-                   color:            "#ff00ff",
-                   WebkitTextStroke: "4px white",
-                   paintOrder:       "stroke fill",
-                 }}>I'm UNO</span>
-               )
-             : "I'm Paulo!"}
+                : isUno ? (
+                  <span style={{
+                    fontFamily: "'Fredoka', sans-serif",
+                    fontWeight: 700,
+                    color: "#ff00ff",
+                    WebkitTextStroke: "4px white",
+                    paintOrder: "stroke fill",
+                  }}>I'm UNO</span>
+                )
+                : "I'm Paulo!"}
             </motion.span>
+
           </h1>
 
           <motion.div className="awards" variants={fromLeft(T3)}>
+
             <h2 className="aTitle">
+
+              {/* ── "Fullstack" / "ARTIST" ───────────────────────────────────
+                  dark:   branco   (inalterado)
+                  uno:    pink     texto → "ARTIST"
+                  normal: VERDE #15ed7a (corrigido de #dc0000)
+              ──────────────────────────────────────────────────────────────── */}
               <motion.span style={{ display: "block" }} variants={fromLeft(T3_1, 0.8)}>
                 <span style={{
-                  color:           isDark ? "#ffffff" : isUno ? "#f472b6" : "#dc0000",
+                  color: isDark ? "#ffffff" : isUno ? "#f472b6" : "#15ed7a",
                   backgroundColor: isDark ? "#000000" : "transparent",
-                  padding:         isDark ? "2px 8px" : "0",
-                  display:         "inline-block",
-                }}>Fullstack</span>
+                  padding: isDark ? "2px 8px" : "0",
+                  display: "inline-block",
+                }}>
+                  {isUno ? "ARTIST" : "Fullstack"}
+                </span>
               </motion.span>
+
+              {/* ── "Web Developer" / "Star Dust" ───────────────────────────
+                  uno: texto → "Star Dust"   (tudo o resto inalterado)
+              ──────────────────────────────────────────────────────────────── */}
               <motion.span
                 style={{
-                  display:         "block",
-                  color:           isDark ? "#dc0000" : isUno ? "#818cf8" : "white",
-                  fontWeight:      "bold",
+                  display: "block",
+                  color: isDark ? "#dc0000" : isUno ? "#818cf8" : "white",
+                  fontWeight: "bold",
                   backgroundColor: isDark ? "#000000" : "transparent",
-                  padding:         isDark ? "2px 8px" : "0",
+                  padding: isDark ? "2px 8px" : "0",
                 }}
                 variants={fromLeft(T4, 0.8)}
               >
-                Web Developer
+                {isUno ? "Star Dust" : "Web Developer"}
               </motion.span>
+
             </h2>
 
+            {/* ── aDesc ────────────────────────────────────────────────────────
+                uno: "Original Human... Irremediable Idealist"
+            ───────────────────────────────────────────────────────────────── */}
             <motion.p className="aDesc" variants={fromLeft(T5, 0.8)}>
-              {isDark ? "I'm gonna do as I please, gonna spread the disease because I want to!"
-             : isUno  ? "Let's build something magical together! ✨🚀🎨"
-             :          "Expertise em criar soluções digitais robustas e escaláveis, unindo o rigor do backend à fluidez do frontend."}
+              {isDark
+                ? "I'm gonna do as I please, gonna spread the disease because I want to!"
+                : isUno
+                ? "Original Human... Irremediable Idealist"
+                : "Expertise em criar soluções digitais robustas e escaláveis, unindo o rigor do backend à fluidez do frontend."}
             </motion.p>
 
             <div className="awardList">
-              <motion.img src="/Nextjs.webp" className="awardImg"   alt="Next.js"   variants={fadeIn(I1)} />
-              <motion.img src="/React19.png" className="awardImg_2" alt="React 19"  variants={fadeIn(I2)} />
-              <motion.img src="/wp.png"      className="awardImg_3" alt="WordPress" variants={fadeIn(I3)} />
+              <motion.img src="/Nextjs.webp" className="awardImg"   alt="Next.js"    variants={fadeIn(I1)} />
+              <motion.img src="/React19.png" className="awardImg_2" alt="React 19"   variants={fadeIn(I2)} />
+              <motion.img src="/wp.png"      className="awardImg_3" alt="WordPress"  variants={fadeIn(I3)} />
             </div>
+
           </motion.div>
+
         </div>
+
 
         {/* —— RIGHT —— */}
         <div className={`hSection right ${isDark ? "right--dark" : ""}`}>
@@ -153,7 +191,7 @@ const Hero = () => {
             <motion.div
               className="follow"
               variants={{
-                hidden:  { y: -150, opacity: 0 },
+                hidden: { y: -150, opacity: 0 },
                 visible: { y: 0, opacity: 1,
                   transition: { delay: R, duration: FOLLOW_DUR, ease: "easeInOut" } },
               }}
@@ -164,7 +202,7 @@ const Hero = () => {
               <motion.div
                 className="followTextContainer"
                 variants={{
-                  hidden:  { rotate: 180 },
+                  hidden: { rotate: 180 },
                   visible: { rotate: 0,
                     transition: { delay: R + FOLLOW_DUR, duration: FOLLOW_ROT, ease: "easeInOut" } },
                 }}
@@ -179,7 +217,7 @@ const Hero = () => {
             <motion.div
               className="follow follow--uno"
               variants={{
-                hidden:  { y: -150, opacity: 0 },
+                hidden: { y: -150, opacity: 0 },
                 visible: { y: 0, opacity: 1,
                   transition: { delay: R, duration: FOLLOW_DUR, ease: "easeInOut" } },
               }}
@@ -190,7 +228,7 @@ const Hero = () => {
               <motion.div
                 className="followTextContainer"
                 variants={{
-                  hidden:  { rotate: 180 },
+                  hidden: { rotate: 180 },
                   visible: { rotate: 0,
                     transition: { delay: R + FOLLOW_DUR, duration: FOLLOW_ROT, ease: "easeInOut" } },
                 }}
@@ -205,15 +243,15 @@ const Hero = () => {
             <motion.div
               className="follow follow--dark"
               initial={{ y: -150, opacity: 0 }}
-              animate={{ y: 0,    opacity: 1 }}
+              animate={{ y: 0, opacity: 1 }}
               transition={{ delay: R, duration: FOLLOW_DUR, ease: "easeInOut" }}
             >
               <div style={{ display:"flex", flexDirection:"column", alignItems:"center" }}>
                 <span style={{
-                  fontFamily:    "'Teko', 'Share Tech Mono', monospace",
-                  fontSize:      "22px", fontWeight: 600, color: "#ffffff",
+                  fontFamily: "'Teko', 'Share Tech Mono', monospace",
+                  fontSize: "22px", fontWeight: 600, color: "#ffffff",
                   letterSpacing: "0.15em", textTransform: "uppercase",
-                  lineHeight:    1, paddingTop: "6px",
+                  lineHeight: 1, paddingTop: "6px",
                 }}>to</span>
                 <span className="follow__darkLabel">FOLLOW</span>
               </div>
@@ -231,24 +269,21 @@ const Hero = () => {
           {/* Imagem morte (dark) ou Speech (normal/uno) */}
           {isDark ? (
             <div className="death-throne-anchor" style={{ position: "relative", marginLeft: "auto", width: "50%", alignSelf: "flex-end" }}>
-            {/* Hero.jsx - Linha ~235 */}
-<motion.img
-  src={morteHover ? "/morte_001_red_800.jpg" : "/morte_001_black.jpg"}
-  alt="morte"
-  variants={fadeIn(SPEECH_DELAY, 0.8)}
-  onMouseEnter={() => setMorteHover(true)}
-  onMouseLeave={() => setMorteHover(false)}
-  onClick={() => setShowRitual(true)}
-  style={{
-    // Mudamos de multiply para screen ou removemos para garantir visibilidade
-    mixBlendMode: 'multiply' , 
-    width: "100%",
-    display: "block",
-    cursor: "pointer",
-    transition: "all 0.3s ease",
-    
-  }}
-/>
+              <motion.img
+                src={morteHover ? "/morte_001_red_800.jpg" : "/morte_001_black.jpg"}
+                alt="morte"
+                variants={fadeIn(SPEECH_DELAY, 0.8)}
+                onMouseEnter={() => setMorteHover(true)}
+                onMouseLeave={() => setMorteHover(false)}
+                onClick={() => setShowRitual(true)}
+                style={{
+                  mixBlendMode: 'multiply',
+                  width: "100%",
+                  display: "block",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease",
+                }}
+              />
               {/* O Relógio aparece apenas no modo Dark sobre a imagem */}
               <DeathClock />
             </div>
@@ -287,6 +322,7 @@ const Hero = () => {
             style={{ display:"block", cursor:"pointer", pointerEvents:"auto" }}
             variants={contactBtnEntry}
           >
+
             {/* Normal + Uno */}
             {!isDark && (
               <motion.div
@@ -344,20 +380,23 @@ const Hero = () => {
                 </div>
               </div>
             )}
+
           </motion.a>
+
         </div>
+
 
         {/* —— BG —— */}
         <div className="bg">
           <Suspense fallback={null}>
             {isDark ? <NeuralBgDark />
-           : isUno  ? (
-               <>
-                 <PsychedelicBackground />
-                 <Neuralbg />
-               </>
-             )
-           : <NeuralbgOriginal />}
+              : isUno ? (
+                <>
+                  <PsychedelicBackground />
+                  <Neuralbg />
+                </>
+              )
+              : <NeuralbgOriginal />}
           </Suspense>
           <div className="avatar">
             <img
