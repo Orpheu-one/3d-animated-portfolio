@@ -1,139 +1,287 @@
+/* ==========================================================================
+   1. IMPORTS & CONFIGURAÇÃO GLOBAL
+   ========================================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Teko:wght@400;600;700&display=swap');
-
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 
+:root {
+  /* Default / Normal Theme */
+  --primary: #15ed7a;
+  --secondary: #b302f9;
+  --tertiary: #ffffff;
+  --bg-gradient: linear-gradient(to bottom, #0a192f, #1e2a3f);
+  --font-main: 'Roboto', sans-serif;
+  --text-color: #ffffff;
+}
 
 * {
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
 }
 
 html {
-  /* Força o snapping no eixo Y */
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
-  /* Garante que o html ocupa a altura toda */
   height: 100%;
   overflow-y: scroll;
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
-  background: linear-gradient(to bottom, #0a192f, #1e2a3f);
-  color: #fff;
-  margin: 0;
+  font-family: var(--font-main);
+  background: var(--bg-gradient);
+  color: var(--text-color);
   height: 100%;
+  transition: background 0.5s ease, color 0.4s ease;
+}
+
+section {
+  height: 100vh;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
 }
 
 a {
   text-decoration: none;
-  color: #fff;
+  color: inherit;
 }
 
-/* O container não deve ter snapping, mas os seus filhos sim */
 .container {
   max-width: 1536px;
   margin: 0 auto;
   padding: 0 16px;
 }
 
-section {
-  height: 100vh;
-  /* Alinha cada secção ao centro/topo no snap */
-  scroll-snap-align: center;
-  /* Garante que a secção pareça um bloco inteiro */
-  scroll-snap-stop: always; 
+/* ==========================================================================
+   2. DEFINIÇÃO DE TEMAS (GLOBAL)
+   ========================================================================== */
+
+/* --- DARK MODE (ORPHEU) --- */
+html[data-theme="dark"] {
+  --primary: #fa0606;       /* Vermelho */
+  --secondary: #737373;     /* Cinza Neutral */
+  --tertiary: #000000;      /* Preto */
+  --font-main: 'Share Tech Mono', monospace;
+  --text-color: #ffffff;
 }
 
-/* Responsividade simplificada */
-@media (min-width: 640px) { .container { max-width: 640px; } }
-@media (min-width: 768px) { .container { max-width: 768px; } }
-@media (min-width: 1024px) { .container { max-width: 1024px; } }
-@media (min-width: 1280px) { .container { max-width: 1280px; } }
-@media (min-width: 1536px) { .container { max-width: 1536px; } }
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   INDEX.CSS  — cola o @import no TOPO do teu index.css,
-                e o bloco dark mode no FUNDO.
-   ───────────────────────────────────────────────────────────────────────────── */
-
-/* ── [TOPO] Adiciona esta linha mesmo antes de qualquer outro estilo ── */
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   O teu index.css existente fica aqui no meio (não alteras nada).
-   ─────────────────────────────────────────────────────────────────────────────
-
-   * { padding:0; margin:0; box-sizing:border-box; }
-   html { ... }
-   body { ... }
-   etc.
-
-   ───────────────────────────────────────────────────────────────────────────── */
-
-
-/* ── [FUNDO] Dark mode — body background ── */
 html[data-theme="dark"] body {
-  background: radial-gradient(
-    ellipse at center,
-    #000000  0%,
-    #000000  5%,
-    #393838ff 50%,
-    #4e4c4cff 100%
-  );
-  color: #000000;
+  background: radial-gradient(ellipse at center, #000000 0%, #000000 5%, #393838 50%, #4e4c4c 100%);
+  color: var(--tertiary); /* Conforme o teu code original, o texto base do body em dark era preto */
 }
 
-/* Transição suave na troca de tema */
-body {
-  transition: background 0.5s ease, color 0.4s ease;
+/* --- UNO MODE (PSYCHEDELIC) --- */
+html[data-theme="uno"] {
+  --primary: #ff00ff;       /* Magenta */
+  --secondary: #00ffff;     /* Cyan */
+  --tertiary: #ffff00;      /* Amarelo */
+  --font-main: 'Fredoka', sans-serif;
+  --text-color: #1a1a2e;
 }
 
-
-
-
-/* ── Uno: body transparente, Fredoka, cores vibrantes ────────────────────────── */
 html[data-theme="uno"] body {
-  background:  transparent;
-  color:       #1a1a2e;
-  font-family: 'Fredoka', 'Roboto', sans-serif;
-  transition:  background 0.5s ease, color 0.4s ease;
+  background: transparent;
+  color: var(--text-color);
 }
 
-/* Sections também transparentes em uno */
 html[data-theme="uno"] section {
   background: transparent;
 }
 
-/* ── Dark mode body (já tinhas, mantido aqui por completude) ─────────────────── */
-html[data-theme="dark"] body {
-  background: radial-gradient(
-    ellipse at center,
-    #000000 0%,
-    #000000 5%,
-    #393838ff 50%,
-    #4e4c4cff 100%
-  );
-  color: #000000;
-}
+/* ==========================================================================
+   3. COMPONENTES: NAVBAR & DROPDOWN
+   ========================================================================== */
 
-/* Transição suave na troca de tema */
-body {
-  transition: background 0.5s ease, color 0.4s ease;
-}
-
-/*---DropDown em DeathClock---*/
-
-/* Efeito de suavização no menu */
 .dropdown-menu {
   transition: all 0.3s ease-in-out;
 }
 
-/* O pedido específico: Hover Vermelho com Texto Branco */
+/* Hover solicitado: Fundo Vermelho, Texto Branco, com Ease */
 .nav-link:hover {
   background-color: red !important;
   color: white !important;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Borders e Hovers em Dark Mode devem ser vermelhos */
+html[data-theme="dark"] .contactBtn:hover .mainCircle {
+  stroke: var(--primary) !important;
+}
+
+/* ==========================================================================
+   4. HERO SECTION & LAYOUT
+   ========================================================================== */
+
+.hero {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+}
+
+.hSection {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hTitle {
+  margin-top: 50px;
+  font-size: 100px;
+  font-weight: 200;
+  color: var(--primary);
+  font-family: var(--font-main);
+}
+
+/* Ajustes específicos Dark */
+html[data-theme="dark"] .hTitle { color: #fa0606ff; }
+html[data-theme="dark"] .hName { color: white; }
+
+/* Ajustes específicos Uno */
+html[data-theme="uno"] .hTitle { color: var(--tertiary); }
+
+.bg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -1;
+}
+
+.avatar {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  max-width: 700px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.avatar img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  mix-blend-mode: screen;
+}
+
+html[data-theme="dark"] .avatar img { mix-blend-mode: normal; }
+html:not([data-theme="dark"]) .avatar { transform: translateX(-50%) translateY(5px); }
+
+/* ==========================================================================
+   5. FOLLOW SIDEBAR & LABELS
+   ========================================================================== */
+
+.follow {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 16px;
+  background-color: #640590ff;
+  border-bottom-right-radius: 10px;
+}
+
+.followText {
+  background-color: var(--primary);
+  font-size: 18px;
+  font-weight: 500;
+  color: #000;
+  rotate: 90deg;
+  width: max-content;
+  padding: 6px 10px;
+  transform-origin: left top;
+  transform: translateY(-20px);
+  display: flex;
+  align-items: center;
+  border-bottom-right-radius: 12px;
+}
+
+/* Dark Follow Específico */
+html[data-theme="dark"] .follow--dark {
+  min-height: 148px;
+  width: 52px;
+  background-color: #0a0000;
+  position: relative;
+}
+
+.follow__darkLabel {
+  font-family: 'Teko', sans-serif;
+  font-size: 22px;
+  color: #fff;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  padding: 10px;
+}
+
+.follow__darkChild {
+  position: absolute;
+  bottom: 0; left: 0;
+  transform-origin: bottom left;
+  background-color: #dc0000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  min-height: 80px;
+  border-top-right-radius: 8px;
+  z-index: 2;
+}
+
+.follow__darkChildText {
+  font-family: 'Teko', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #000;
+  writing-mode: vertical-rl;
+}
+
+/* ==========================================================================
+   6. CONTACT BUTTON & ASSETS
+   ========================================================================== */
+
+.contactBtn {
+  margin-bottom: 50px;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.contactButtonContainer {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.contactBtn:hover {
+  transform: scale(1.08);
+  filter: drop-shadow(0px 8px 15px rgba(0, 0, 0, 0.5));
+}
+
+.mainCircle {
+  fill: var(--primary);
+  transition: stroke 0.3s ease;
+}
+
+.circleText {
+  letter-spacing: 3px;
+  font-size: 20px;
+  fill: black;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   7. RESPONSIVIDADE
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .avatar { width: 80%; max-width: 600px; }
+  .hTitle { font-size: 64px; }
+}
+
+@media (max-width: 640px) {
+  .avatar { width: 80%; max-width: 380px; }
+  .hTitle { font-size: 48px; }
+  .hSection { width: 100%; }
 }
