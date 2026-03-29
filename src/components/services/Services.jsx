@@ -14,29 +14,29 @@ import "./services.css";
 
 
 // ——— TUNABLES ——————————————————————————————————————————————————————————————————
-const YOLK_RADIUS   = 0.33;         // normal / uno
-const YOLK_Y_LOCAL  = -0.48;        // normal / uno centre Y
-const YOLK_R_DARK   = 0.495;        // dark: 50% maior (0.33 × 1.5)
-const YOLK_Y_DARK   = -0.315;       // dark: fundo da gema mantém-se em -0.81
+const YOLK_RADIUS   = 0.33;
+const YOLK_Y_LOCAL  = -0.38;   // +0.10 vs anterior (normal + uno)
+const YOLK_R_DARK   = 0.495;
+const YOLK_Y_DARK   = -0.315;
 
-const FLUID_RADIUS  = 0.73;
-const ENV_INTENSITY = 0.55;
-const EGG_SCALE_Y   = 1.35;
-const MASTER_SCALE  = 0.60;
+const FLUID_RADIUS     = 0.73;
+const ENV_INTENSITY    = 0.55;
+const EGG_SCALE_Y      = 1.35;
+const MASTER_SCALE     = 0.60;
 
 const BACKLIGHT_NORMAL = "#00ff44";
 const BACKLIGHT_DARK   = "#ff2200";
+const BACKLIGHT_UNO    = "#ff00ff";   // magenta para Uno
 const BACKLIGHT_INT    = 50;
 
-// Neural Yolk pulses — mais rápidos
 const NP_MAX        = 16;
-const NP_SPEED      = 0.040;        // era 0.022
-const NP_SPAWN_RATE = 0.18;         // era 0.10
+const NP_SPEED      = 0.040;
+const NP_SPAWN_RATE = 0.18;
 const NP_CHAIN_PROB = 0.65;
 const NP_SEED       = 6;
 
 
-// ——— TETRAKIS HEXAHEDRON (inalterado) —————————————————————————————————————————
+// ——— TETRAKIS HEXAHEDRON (inalterado) ——————————————————————————————————————————
 const INV3 = 1 / Math.sqrt(3);
 const TKH_NODES = (() => {
   const n = [];
@@ -69,16 +69,14 @@ function buildTKHGeo(r) {
 
 
 // ——— DARK YOLK SHADER ——————————————————————————————————————————————————————————
-// Mudanças: granulação fbm*4.0 (era 7.2, grão maior/mais subtil), gran*0.22 (era 0.42),
-// spots fbm*1.6 (era 3.1, manchas maiores), drift 0.020/0.012 (era 0.008/0.004, mais rápido),
-// spots2 fbm*2.5 (era 5.5)
+// Alterações vs anterior:
+//   drift UV: 0.020/0.012 → 0.050/0.028  (animação mais rápida)
+//   spotMask: smoothstep(0.60,0.42) → smoothstep(0.50,0.38)  (manchas menores)
 const DARK_VERT = `varying vec3 vPos; varying vec3 vNormal; void main() { vPos = position; vNormal = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`;
-const DARK_FRAG = `varying vec3 vPos; varying vec3 vNormal; uniform float uTime; float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); } float noise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f); return mix(mix(hash(i),hash(i+vec2(1,0)),f.x), mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y); } float fbm(vec2 p){ float v=0.0,a=0.5; for(int i=0;i<4;i++){v+=a*noise(p);p*=2.1;a*=0.5;} return v; } void main() { vec3 p = normalize(vPos); float lon = atan(p.z, p.x) / 6.2832 + 0.5; float lat = asin(clamp(p.y,-1.0,1.0)) / 3.1416 + 0.5; vec2 uv = vec2(lon + uTime * 0.025, lat); float gran = fbm(uv * 4.0 + uTime * 0.045); vec2 suv = vec2(lon + uTime * 0.020, lat + uTime * 0.012 + 0.7); float spots = fbm(suv * 1.6 + 0.9); float spotMask = smoothstep(0.60, 0.42, spots); float spots2 = fbm(suv * 2.5 + 1.7); float spot2M = smoothstep(0.64, 0.50, spots2) * 0.55; vec3 base = vec3(0.82, 0.02, 0.01); vec3 col = mix(base, vec3(0.95, 0.14, 0.04), gran * 0.22); col = mix(col, vec3(0.015, 0.0, 0.0), spotMask * 0.94); col = mix(col, vec3(0.04, 0.005, 0.005), spot2M); float limb = abs(dot(vNormal, vec3(0.0,0.0,1.0))); col *= 0.52 + 0.48 * limb; gl_FragColor = vec4(col, 1.0); }`;
+const DARK_FRAG = `varying vec3 vPos; varying vec3 vNormal; uniform float uTime; float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); } float noise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f); return mix(mix(hash(i),hash(i+vec2(1,0)),f.x), mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y); } float fbm(vec2 p){ float v=0.0,a=0.5; for(int i=0;i<4;i++){v+=a*noise(p);p*=2.1;a*=0.5;} return v; } void main() { vec3 p = normalize(vPos); float lon = atan(p.z, p.x) / 6.2832 + 0.5; float lat = asin(clamp(p.y,-1.0,1.0)) / 3.1416 + 0.5; vec2 uv = vec2(lon + uTime * 0.025, lat); float gran = fbm(uv * 4.0 + uTime * 0.045); vec2 suv = vec2(lon + uTime * 0.050, lat + uTime * 0.028 + 0.7); float spots = fbm(suv * 1.6 + 0.9); float spotMask = smoothstep(0.50, 0.38, spots); float spots2 = fbm(suv * 2.5 + 1.7); float spot2M = smoothstep(0.56, 0.44, spots2) * 0.55; vec3 base = vec3(0.82, 0.02, 0.01); vec3 col = mix(base, vec3(0.95, 0.14, 0.04), gran * 0.22); col = mix(col, vec3(0.015, 0.0, 0.0), spotMask * 0.94); col = mix(col, vec3(0.04, 0.005, 0.005), spot2M); float limb = abs(dot(vNormal, vec3(0.0,0.0,1.0))); col *= 0.52 + 0.48 * limb; gl_FragColor = vec4(col, 1.0); }`;
 
 
-// ——— FLUID SHADER ——————————————————————————————————————————————————————————————
-// Mudanças: uv scale 2.4 (era 1.8), t speed 0.35 (era 0.18), pow 1.6 (era 2.8),
-// alpha -10%: 0.036 / 0.081 / 0.108 (era 0.04 / 0.09 / 0.12)
+// ——— FLUID SHADER (inalterado) ——————————————————————————————————————————————————
 const FLUID_VERT = `varying vec3 vPos; varying vec3 vNormal; void main() { vPos = position; vNormal = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`;
 const FLUID_FRAG = `varying vec3 vPos; varying vec3 vNormal; uniform float uTime; void main() { vec3 p = normalize(vPos); float lon = atan(p.z, p.x); float lat = asin(clamp(p.y,-1.0,1.0)); vec2 uv = vec2(lon, lat) * 2.4; float t = uTime * 0.35; float c1 = sin(uv.x*3.1 + t) * cos(uv.y*2.7 + t*0.8); float c2 = sin(uv.x*1.9 + t*1.3+1.1) * cos(uv.y*3.5 + t*0.5+2.4); float c3 = sin(uv.x*4.7 - t*0.7+3.0) * cos(uv.y*1.8 - t*1.1+1.6); float caust = (c1+c2+c3) / 3.0 * 0.5 + 0.5; caust = pow(caust, 1.6); float fresnel = 1.0 - abs(dot(vNormal, vec3(0.0,0.0,1.0))); fresnel = pow(fresnel, 2.5); vec3 col = vec3(1.0, 0.96, 0.78); float alpha = 0.036 + caust * 0.081 + fresnel * 0.108; gl_FragColor = vec4(col * (0.85 + caust * 0.35), alpha); }`;
 
@@ -96,8 +94,7 @@ const FluidMesh = () => {
 
 
 // ——— NEURAL YOLK 3D (normal) ——————————————————————————————————————————————————
-// Mudanças: opacity 0.30 (era 0.60), pointLight 0.6 (era 4.0 → -85%),
-// rotation y 0.009 (era 0.005), x 0.004 (era 0.0015)
+// Alterações: pointLight desligada (0), rotação y 0.016 / x 0.008 (mais rápida)
 const NeuralYolk3D = () => {
   const meshRef=useRef(), linesRef=useRef(), instRef=useRef(), pulsesRef=useRef([]), litRef=useRef({}), startedRef=useRef(false), tmpMat=useRef(new THREE.Matrix4()), tmpVec=useRef(new THREE.Vector3());
   const tkhGeo = useMemo(() => buildTKHGeo(YOLK_RADIUS), []);
@@ -117,7 +114,7 @@ const NeuralYolk3D = () => {
   useFrame(() => {
     const now=performance.now();
     if (!startedRef.current) { startedRef.current=true; for(let i=0;i<NP_SEED;i++) spawnPulse(); }
-    if (meshRef.current) { meshRef.current.rotation.y+=0.009; meshRef.current.rotation.x+=0.004; }
+    if (meshRef.current) { meshRef.current.rotation.y+=0.016; meshRef.current.rotation.x+=0.008; }
     if (Math.random()<NP_SPAWN_RATE) spawnPulse();
     const remove=[];
     pulsesRef.current.forEach((p,pi)=>{p.t+=p.dir*NP_SPEED;if(p.dir>0?p.t>=1:p.t<=0){const arr=p.dir>0?TKH_EDGES[p.edgeIdx][1]:TKH_EDGES[p.edgeIdx][0];if(p.depth<4&&Math.random()<NP_CHAIN_PROB)spawnPulse(arr,p.edgeIdx,p.depth+1);remove.push(pi);}});
@@ -137,16 +134,14 @@ const NeuralYolk3D = () => {
         <sphereGeometry args={[0.014, 8, 8]} />
         <meshBasicMaterial color="#ffffff" />
       </instancedMesh>
-      {/* Luz interior: -85% (4.0 → 0.60) */}
-      <pointLight color="#ffaa00" intensity={0.60} distance={1.4} />
+      {/* Luz interior desligada para ver melhor a gema */}
+      <pointLight color="#ffaa00" intensity={0} distance={1.4} />
     </group>
   );
 };
 
 
-// ——— DARK YOLK ————————————————————————————————————————————————————————————————
-// Mudanças: YOLK_R_DARK / YOLK_Y_DARK (50% maior, fundo fixo)
-// Rotação 2× mais rápida: x ±0.028, y ±0.024, z ±0.016 (era ±0.014/±0.012/±0.008)
+// ——— DARK YOLK (inalterado excepto shader acima) ——————————————————————————————
 const DarkYolk = () => {
   const meshRef=useRef(), matRef=useRef();
   const uniforms=useMemo(()=>({uTime:{value:0}}),[]);
@@ -172,29 +167,41 @@ const DarkYolk = () => {
 
 
 // ——— UNO YOLK ————————————————————————————————————————————————————————————————
-// Mudança: intensidade da pointLight pulsa aleatoriamente via useFrame
+// Alteração: Y sobe +0.10 (mesmo YOLK_Y_LOCAL), escala pulsa em sincronia com luz
 const UnoYolk = () => {
   const meshRef  = useRef();
   const lightRef = useRef();
+  const scaleRef = useRef();
   const phase    = useMemo(() => Math.random() * Math.PI * 2, []);
+
   useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
     if (meshRef.current) meshRef.current.rotation.y += 0.003;
-    if (lightRef.current) {
-      const t = clock.getElapsedTime();
-      // Duas frequências sobrepostas para variação orgânica
-      const pulse = 2.8
-        + Math.sin(t * 0.9  + phase)        * 1.4
-        + Math.sin(t * 2.7  + phase * 1.3)  * 0.6
-        + Math.sin(t * 5.1  + phase * 0.7)  * 0.25;
-      lightRef.current.intensity = Math.max(0.5, pulse);
+
+    // Pulso orgânico — duas frequências sobrepostas
+    const pulse = 2.8
+      + Math.sin(t * 0.9  + phase)       * 1.4
+      + Math.sin(t * 2.7  + phase * 1.3) * 0.6
+      + Math.sin(t * 5.1  + phase * 0.7) * 0.25;
+    const intensity = Math.max(0.5, pulse);
+
+    if (lightRef.current) lightRef.current.intensity = intensity;
+
+    // Escala em sincronia: normaliza intensity (range ~0.5-5.05) → scale 0.85-1.15
+    if (scaleRef.current) {
+      const s = 0.85 + (intensity / 5.05) * 0.30;
+      scaleRef.current.scale.setScalar(s);
     }
   });
+
   return (
     <group position={[0, YOLK_Y_LOCAL, 0]}>
-      <mesh ref={meshRef}>
-        <sphereGeometry args={[YOLK_RADIUS, 32, 32]} />
-        <meshBasicMaterial color="#ffffff" />
-      </mesh>
+      <group ref={scaleRef}>
+        <mesh ref={meshRef}>
+          <sphereGeometry args={[YOLK_RADIUS, 32, 32]} />
+          <meshBasicMaterial color="#ffffff" />
+        </mesh>
+      </group>
       <pointLight ref={lightRef} color="#ffffff" intensity={4} distance={1.5} />
     </group>
   );
@@ -202,22 +209,29 @@ const UnoYolk = () => {
 
 
 // ——— ALIEN EGG SCENE ——————————————————————————————————————————————————————————
-// Mudança: isUno não renderiza FluidMesh
+// Alteração: rimColor agora inclui Uno = magenta; shell roughness dark 0.55→0.30
 const AlienEgg = () => {
   const { isDark, isUno } = useTheme();
   const shellRef = useRef();
   useFrame(({ clock }) => { if (shellRef.current) shellRef.current.rotation.y = clock.getElapsedTime() * 0.05; });
+
   const groupScaleY = isDark ? EGG_SCALE_Y : 1;
   const groupScale  = [MASTER_SCALE, MASTER_SCALE * groupScaleY, MASTER_SCALE];
-  const rimColor    = isDark ? BACKLIGHT_DARK : BACKLIGHT_NORMAL;
+
+  // Rim light: verde normal, vermelho dark, magenta uno
+  const rimColor = isDark ? BACKLIGHT_DARK : isUno ? BACKLIGHT_UNO : BACKLIGHT_NORMAL;
+
   return (
     <>
       <ambientLight intensity={0.04} />
       <directionalLight position={[1.5, 2, 3]} intensity={1.6} color="#ffffff" />
       <spotLight position={[3.5, 0.5, 0.8]} angle={0.38} penumbra={0.65} intensity={BACKLIGHT_INT} color={rimColor} distance={14} />
       <pointLight position={[2.5, 0.2, -2.5]} intensity={7} color={rimColor} distance={9} />
+
       <Float speed={1.2} rotationIntensity={0.2} floatIntensity={0.2}>
         <group scale={groupScale}>
+
+          {/* CASCA: dark roughness 0.55→0.30 (textura muito mais subtil) */}
           <mesh ref={shellRef}>
             <sphereGeometry args={[1, 64, 64]} />
             <MeshTransmissionMaterial
@@ -226,21 +240,22 @@ const AlienEgg = () => {
               distortion={0.08} distortionScale={0.10}
               color={isDark ? "#fff0f0" : isUno ? "#f5f0ff" : "#ffffff"}
               transmission={isDark ? 0.96 : 0.97}
-              roughness={isDark ? 0.55 : 0.35}
+              roughness={isDark ? 0.30 : 0.35}
               metalness={0.0} ior={1.38}
               attenuationColor={isDark ? "#ffdddd" : "#fffce8"}
               attenuationDistance={0.9} transparent
             />
           </mesh>
 
-          {/* Fluido: apenas em normal e dark — Uno usa só a gema de luz */}
           {!isUno && <FluidMesh />}
 
           {!isDark && !isUno && <NeuralYolk3D />}
           {isDark             && <DarkYolk />}
           {isUno              && <UnoYolk />}
+
         </group>
       </Float>
+
       <Environment preset="night" environmentIntensity={ENV_INTENSITY} />
     </>
   );
@@ -260,15 +275,15 @@ const AlienEggContainer = () => (
 
 // ——— SERVICES ——————————————————————————————————————————————————————————————————
 const items = [
-  { id: 2, title: "Manisfesto",     description: "A criação do pensamento  para o futuro" },
-  { id: 1, title: "Bio-Interface", description: "Organic Gestation Systems" },
-  { id: 3, title: "Thinktank lαβ", description: "Dissociative Original Ideas" },
+  { id: 2, titleDark: "Manifesto",     titleOther: "Tech-Core",     descDark: "A criação do pensamento para o futuro", descOther: "Inorganic Structures" },
+  { id: 1, titleDark: "Bio-Interface", titleOther: "Bio-Interface",  descDark: "Organic Gestation Systems",            descOther: "Organic Gestation Systems" },
+  { id: 3, titleDark: "Thinktank lαβ", titleOther: "Thinktank lαβ", descDark: "Dissociative Original Ideas",          descOther: "Dissociative Original Ideas" },
 ];
 
 const Services = () => {
   const { isDark, isUno } = useTheme();
-  const [activeItemId, setActiveItemId] = useState(2);
-  const [hoveredId, setHoveredId]       = useState(null);  // hover simples sem motion
+  const [activeItemId, setActiveItemId]   = useState(2);
+  const [hoveredId, setHoveredId]         = useState(null);
   const [showManifesto, setShowManifesto] = useState(false);
 
   const themeColor = useMemo(() => {
@@ -278,6 +293,9 @@ const Services = () => {
   }, [isDark, isUno]);
 
   const bgActive = `${themeColor}0D`;
+
+  // H1 por theme
+  const pageTitle = isDark ? "Hephaestus Forge" : isUno ? "laβ" : "Services";
 
   const handleItemClick = (id) => {
     if (id === 2 && isDark) { setShowManifesto(true); }
@@ -297,13 +315,16 @@ const Services = () => {
       </AnimatePresence>
 
       <div className="sSection left">
-        <h1 className="sTitle" style={{ color: themeColor }}>Hefeistus Forge</h1>
+        {/* H1 dinâmico por theme */}
+        <h1 className="sTitle" style={{ color: themeColor }}>{pageTitle}</h1>
 
-        {/* sLeftC — motion removido. Hover e active via estado local + CSS inline */}
         <div className="sLeftC">
           {items.map(item => {
             const isActive  = activeItemId === item.id;
             const isHovered = hoveredId    === item.id;
+            const title = isDark ? item.titleDark : item.titleOther;
+            const desc  = isDark ? item.descDark  : item.descOther;
+
             return (
               <div
                 key={item.id}
@@ -324,8 +345,8 @@ const Services = () => {
                   transition: "transform 0.08s ease-out, border-color 0.08s ease-out, background 0.08s ease-out",
                 }}
               >
-                <h2 style={{ fontSize: "1.5rem", margin: 0, color: themeColor }}>{item.title}</h2>
-                <p style={{ opacity: 0.6, fontSize: "0.9rem" }}>{item.description}</p>
+                <h2 style={{ fontSize: "1.5rem", margin: 0, color: themeColor }}>{title}</h2>
+                <p style={{ opacity: 0.6, fontSize: "0.9rem" }}>{desc}</p>
               </div>
             );
           })}

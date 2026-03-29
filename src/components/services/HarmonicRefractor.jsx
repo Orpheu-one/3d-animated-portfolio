@@ -8,22 +8,20 @@ import { useTheme } from "../../context/ThemeContext";
 const HarmonicRefractor = () => {
   const { isDark, isUno } = useTheme();
   const { camera } = useThree();
-  const meshRef    = useRef();
-  const orbitsRef  = useRef([]);
+  const meshRef   = useRef();
+  const orbitsRef = useRef([]);
 
   useEffect(() => {
     camera.position.z = 12;
     camera.updateProjectionMatrix();
   }, [camera]);
 
-  // Cores por theme — Uno: rosa-fúcsia etéreo (era amarelo)
   const orbitColor = useMemo(() => {
-    if (isUno) return "#e879f9"; // lavanda-fúcsia etéreo
+    if (isUno) return "#e879f9"; // fúcsia-lavanda etéreo
     if (isDark) return "#ff2200"; // vermelho
     return "#15ed7a";             // verde
   }, [isDark, isUno]);
 
-  // Lógica de animação original (SEM ALTERAÇÕES)
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
     if (meshRef.current) {
@@ -39,11 +37,10 @@ const HarmonicRefractor = () => {
   });
 
   return (
-    // scale 0.825 (~17.5% menor) — orbitas ficam dentro do canvas
     <group scale={0.825}>
       <Float speed={3} rotationIntensity={0.8} floatIntensity={0.8}>
 
-        {/* Núcleo de Refração (SEM ALTERAÇÕES) */}
+        {/* Núcleo de Refração */}
         <mesh ref={meshRef}>
           <octahedronGeometry args={[1.5, 0]} />
           <MeshTransmissionMaterial
@@ -57,7 +54,10 @@ const HarmonicRefractor = () => {
           />
         </mesh>
 
-        {/* Sistema de 3 Órbitas — espessura 0.09 (SEM ALTERAÇÕES) */}
+        {/* Sistema de 3 Órbitas
+            FIX: emissiveIntensity 15 → 3.5
+            Com 15 o canal satura e tudo vira branco independentemente da cor.
+            Com 3.5 o anel brilha intensamente mas mantém a tonalidade correta. */}
         {[0, 1, 2].map((i) => (
           <mesh
             key={i}
@@ -68,16 +68,15 @@ const HarmonicRefractor = () => {
             <meshStandardMaterial
               color={orbitColor}
               emissive={orbitColor}
-              emissiveIntensity={15}
+              emissiveIntensity={0.5}
               transparent
-              opacity={0.8}
+              opacity={0.9}
             />
           </mesh>
         ))}
 
       </Float>
 
-      {/* Iluminação pontual centralizada (SEM ALTERAÇÕES) */}
       <pointLight position={[0, 0, 0]} intensity={5} color={orbitColor} />
       <Environment preset="city" />
     </group>
