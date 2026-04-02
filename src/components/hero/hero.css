@@ -736,3 +736,12 @@ html[data-theme="dark"] .follow--dark {
 html:not([data-theme="dark"]) .avatar {
   transform: translateX(-50%) translateY(5px);
 }
+
+@keyframes pulse-glow {
+  0%, 100% { filter: brightness(100%) contrast(100%); }
+  50% { filter: brightness(115%) contrast(110%) saturate(120%); }
+}
+
+.hSection.right {
+  animation: pulse-glow 8s ease-in-out infinite;
+}

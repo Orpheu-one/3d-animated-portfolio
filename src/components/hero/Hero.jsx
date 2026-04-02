@@ -752,7 +752,7 @@ transition={{ duration:10, repeat:Infinity, ease:"linear" }}
 
 </Suspense>
 
-<div className="avatar">
+<div className="avatar" style={isDark ? { mixBlendMode:"normal" } : { mixBlendMode:"overlay" }}>
 
 <img
 
@@ -760,7 +760,7 @@ src={avatarSrc}
 
 alt=""
 
-style={isDark ? { mixBlendMode:"normal" } : { mixBlendMode:"screen" }}
+style={isDark ? { mixBlendMode:"normal" } : { mixBlendMode:"darken" }}
 
 />
 
