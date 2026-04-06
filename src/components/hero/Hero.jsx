@@ -25,6 +25,12 @@ import RainbowHeart from "./RainbowHeart"
 import { useTheme } from "../../context/ThemeContext"
 
 
+// ─── Tunables ────────────────────────────────────────────────────────────────
+const UNO_RABBIT_IMG  = "/white_rabbit_001.png"
+const UNO_RABBIT_SIZE = 90          // px — tamanho da imagem no centro
+const UNO_BTN_HREF    = "#rabbit-form"   // ← substituir quando o form existir
+// ─────────────────────────────────────────────────────────────────────────────
+
 // ─── Timeline ────────────────────────────────────────────────────────────────
 
 const speed = 0.8
@@ -79,7 +85,6 @@ const Hero = () => {
       transition: { delay: BUTTON_DELAY, duration: 2.2, ease: "easeInOut" } },
   }
 
-
   return (
 
     <>
@@ -94,7 +99,6 @@ const Hero = () => {
         whileInView="visible"
         viewport={{ once: false, amount: 0.3 }}
       >
-
 
         {/* ── LEFT ────────────────────────────────────────────────────────── */}
 
@@ -111,8 +115,8 @@ const Hero = () => {
             <motion.span
               className="hName"
               style={{
-                display: "block",
-                color: isDark ? "#000000" : undefined,
+                display:    "block",
+                color:      isDark ? "#000000" : undefined,
                 fontWeight: isDark ? 900 : undefined,
               }}
               variants={fromLeft(T2)}
@@ -120,11 +124,11 @@ const Hero = () => {
               {isDark ? "I'm Orpheu!"
               : isUno ? (
                 <span style={{
-                  fontFamily: "'Fredoka', sans-serif",
-                  fontWeight: 700,
-                  color: "#ff00ff",
-                  WebkitTextStroke: "4px white",
-                  paintOrder: "stroke fill",
+                  fontFamily:      "'Fredoka', sans-serif",
+                  fontWeight:      700,
+                  color:           "#ff00ff",
+                  WebkitTextStroke:"4px white",
+                  paintOrder:      "stroke fill",
                 }}>I'm UNO</span>
               )
               : "I'm Paulo!"}
@@ -132,18 +136,17 @@ const Hero = () => {
 
           </h1>
 
-
           <motion.div className="awards" variants={fromLeft(T3)}>
 
             <h2 className="aTitle">
 
               <motion.span style={{ display: "block" }} variants={fromLeft(T3_1, 0.8)}>
                 <span style={{
-                  color: isDark ? "#ffffff" : isUno ? "#ff00ff" : "#15ed7a",
-                  mixBlendMode: isUno ? "normal" : undefined,
+                  color:           isDark ? "#ffffff" : isUno ? "#ff00ff" : "#15ed7a",
+                  mixBlendMode:    isUno ? "normal" : undefined,
                   backgroundColor: isDark ? "#000000" : "transparent",
-                  padding: isDark ? "2px 8px" : "0",
-                  display: "inline-block",
+                  padding:         isDark ? "2px 8px" : "0",
+                  display:         "inline-block",
                 }}>
                   {isUno ? "ARTIST" : "Fullstack"}
                 </span>
@@ -151,12 +154,12 @@ const Hero = () => {
 
               <motion.span
                 style={{
-                  display: "block",
-                  color: isDark ? "#dc0000" : isUno ? "#00ffff" : "white",
-                  mixBlendMode: isUno ? "normal" : undefined,
-                  fontWeight: "bold",
+                  display:         "block",
+                  color:           isDark ? "#dc0000" : isUno ? "#00ffff" : "white",
+                  mixBlendMode:    isUno ? "normal" : undefined,
+                  fontWeight:      "bold",
                   backgroundColor: isDark ? "#000000" : "transparent",
-                  padding: isDark ? "2px 8px" : "0",
+                  padding:         isDark ? "2px 8px" : "0",
                 }}
                 variants={fromLeft(T4, 0.8)}
               >
@@ -188,7 +191,6 @@ const Hero = () => {
 
         <div className={`hSection right ${isDark ? "right--dark" : ""}`}>
 
-
           {/* NORMAL follow */}
           {!isDark && !isUno && (
             <motion.div
@@ -214,7 +216,6 @@ const Hero = () => {
               </motion.div>
             </motion.div>
           )}
-
 
           {/* UNO follow */}
           {isUno && (
@@ -242,7 +243,6 @@ const Hero = () => {
             </motion.div>
           )}
 
-
           {/* DARK follow */}
           {isDark && (
             <motion.div
@@ -253,10 +253,10 @@ const Hero = () => {
             >
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <span style={{
-                  fontFamily: "'Teko', 'Share Tech Mono', monospace",
-                  fontSize: "22px", fontWeight: 600, color: "#ffffff",
+                  fontFamily:    "'Teko', 'Share Tech Mono', monospace",
+                  fontSize:      "22px", fontWeight: 600, color: "#ffffff",
                   letterSpacing: "0.15em", textTransform: "uppercase",
-                  lineHeight: 1, paddingTop: "6px",
+                  lineHeight:    1, paddingTop: "6px",
                 }}>to</span>
                 <span className="follow__darkLabel">FOLLOW</span>
               </div>
@@ -271,28 +271,20 @@ const Hero = () => {
             </motion.div>
           )}
 
-
-          {/* ── DeathClock (dark + uno) | Speech (normal) ─────────────────────
-              whileInView próprio p garantir re-entry animation independente
-          ─────────────────────────────────────────────────────────────────── */}
+          {/* ── DeathClock (dark + uno) | Speech (normal) ─────────────────── */}
           {(isDark || isUno) ? (
-
             <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: false, amount: 0.2 }}
               variants={fadeIn(SPEECH_DELAY, 0.8)}
-              style={{ marginLeft: "auto", width: "50%", alignSelf: "flex-end" }}
+              style={{ marginLeft: "auto", width: "40%", alignSelf: "flex-end" }}
             >
               <DeathClock />
             </motion.div>
-
           ) : (
-
             <Speech delay={SPEECH_DELAY} />
-
           )}
-
 
           {/* Certificate */}
           <motion.div
@@ -306,12 +298,11 @@ const Hero = () => {
                 : undefined
             }
           >
-
             {isUno ? (
               <img
                 src="/Heart_Uno_001.png"
                 alt="Certificado"
-                style={{ width: "250px", height: "250px", objectFit: "contain" }}
+                style={{ width: "200px", height: "200px", objectFit: "contain" }}
               />
             ) : (
               <img
@@ -332,20 +323,19 @@ const Hero = () => {
               ? <span style={{ color: "#f472b6", fontFamily: "'Fredoka', sans-serif", fontSize: "18px", fontWeight: 600 }}>CERTIFIED DREAMER</span>
               : "CERTIFIED PROFESSIONAL"
             }
-
           </motion.div>
 
 
-          {/* Contact Button */}
+          {/* ── Contact Button ───────────────────────────────────────────────── */}
           <motion.a
-            href="#contacts"
+            href={isUno ? UNO_BTN_HREF : "#contacts"}
             className="contactBtn"
             style={{ display: "block", cursor: "pointer", pointerEvents: "auto" }}
             variants={contactBtnEntry}
           >
 
-            {/* Normal + Uno */}
-            {!isDark && (
+            {/* ── NORMAL ──────────────────────────────────────────────────── */}
+            {!isDark && !isUno && (
               <motion.div
                 className="contactButtonContainer"
                 animate={{ rotate: 360 }}
@@ -357,14 +347,10 @@ const Hero = () => {
                   <path id="innerCirclePath" fill="none"
                     d="M 100,100 m -60,0 a 60,60 0 1,1 120,0 a 60,60 0 1,1 -120,0" />
                   <text className="circleText">
-                    <textPath href="#innerCirclePath">
-                      {isUno ? "Play with me! •" : "Hire Now •"}
-                    </textPath>
+                    <textPath href="#innerCirclePath">Hire Now •</textPath>
                   </text>
                   <text className="circleText">
-                    <textPath href="#innerCirclePath" startOffset="44%">
-                      {isUno ? "Let's go! •" : "Contact Me •"}
-                    </textPath>
+                    <textPath href="#innerCirclePath" startOffset="44%">Contact Me •</textPath>
                   </text>
                 </svg>
                 <div className="arrow">
@@ -377,33 +363,154 @@ const Hero = () => {
               </motion.div>
             )}
 
-            {/* Dark */}
-            {isDark && (
-              <div className="contactButtonContainer" style={{ position: "relative", width: BTN, height: BTN, pointerEvents: "none" }}>
+            {/* ── UNO ─────────────────────────────────────────────────────── */}
+            {isUno && (
+              <div
+                className="contactButtonContainer"
+                style={{ position: "relative", width: BTN, height: BTN, pointerEvents: "none" }}
+              >
+                {/* Anel rotativo — branco com border preta */}
                 <motion.div
-                  style={{ position: "absolute", top: 0, left: 0, width: BTN, height: BTN, transformOrigin: `${BTN_HALF}px ${BTN_HALF}px` }}
+                  style={{
+                    position:        "absolute",
+                    top: 0, left: 0,
+                    width:           BTN,
+                    height:          BTN,
+                    transformOrigin: `${BTN_HALF}px ${BTN_HALF}px`,
+                  }}
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                >
+                  <svg viewBox="0 0 200 200" width={BTN} height={BTN}>
+                    {/* Círculo branco com border preta */}
+                    <circle
+                      cx="100" cy="100" r="89"
+                      fill="#ffffff"
+                      stroke="#000000"
+                      strokeWidth="3"
+                    />
+                    {/* Buraco central branco */}
+                    <circle cx="100" cy="100" r="46" fill="#ffffff" stroke="#000000" strokeWidth="1.5" />
+                    {/* Path do texto */}
+                    <path
+                      id="unoCirclePath" fill="none"
+                      d="M 100,100 m -64,0 a 64,64 0 1,1 128,0 a 64,64 0 1,1 -128,0"
+                    />
+                    {/* Texto em preto */}
+                   <text 
+  fontSize="18" 
+  fontWeight="bold" 
+  fill="#000000" 
+  letterSpacing="2"
+  fontFamily="'Share Tech Mono', monospace"
+>
+                      <textPath href="#unoCirclePath" startOffset="0%">
+                        • Follow the white rabbit. •
+                      </textPath>
+                    </text>
+                  </svg>
+                </motion.div>
+
+                {/* Imagem centrada — white rabbit 100px */}
+                <div style={{
+                  position:       "absolute",
+                  top: 0, left: 0,
+                  width:          BTN,
+                  height:         BTN,
+                  display:        "flex",
+                  alignItems:     "center",
+                  justifyContent: "center",
+                  pointerEvents:  "none",
+                }}>
+                  <div style={{
+                    width:           UNO_RABBIT_SIZE,
+                    height:          UNO_RABBIT_SIZE,
+                    borderRadius:    "50%",
+                    overflow:        "hidden",
+                    backgroundColor: "#ffffff",
+                    flexShrink:      0,
+                    border:          "1.5px solid #000000",
+                  }}>
+                    <img
+                      src={UNO_RABBIT_IMG}
+                      alt="white rabbit"
+                      style={{
+                        width:      "100%",
+                        height:     "100%",
+                        objectFit:  "cover",
+                        display:    "block",
+                      }}
+                    />
+                  </div>
+                </div>
+
+              </div>
+            )}
+
+            {/* ── DARK ────────────────────────────────────────────────────── */}
+            {isDark && (
+              <div
+                className="contactButtonContainer"
+                style={{ position: "relative", width: BTN, height: BTN, pointerEvents: "none" }}
+              >
+                <motion.div
+                  style={{
+                    position:        "absolute",
+                    top: 0, left: 0,
+                    width:           BTN,
+                    height:          BTN,
+                    transformOrigin: `${BTN_HALF}px ${BTN_HALF}px`,
+                  }}
                   animate={{ rotate: 360 }}
                   transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
                 >
                   <svg viewBox="0 0 200 200" width={BTN} height={BTN}>
                     <circle cx="100" cy="100" r="89" fill="#fa0505" stroke="#000000" strokeWidth="2" />
                     <circle cx="100" cy="100" r="46" fill="#000000" />
-                    <path id="darkCirclePath" fill="none" d="M 100,100 m -64,0 a 64,64 0 1,1 128,0 a 64,64 0 1,1 -128,0" />
+                    <path id="darkCirclePath" fill="none"
+                      d="M 100,100 m -64,0 a 64,64 0 1,1 128,0 a 64,64 0 1,1 -128,0" />
                     <text fontSize="24" fontWeight="bold" fill="black" letterSpacing="3">
-                      <textPath href="#darkCirclePath" startOffset="0%">Take a walk on the Dark Side. •</textPath>
+                      <textPath href="#darkCirclePath" startOffset="0%">
+                        Take a walk on the Dark Side. •
+                      </textPath>
                     </text>
                   </svg>
                 </motion.div>
-                <div style={{ position: "absolute", top: 0, left: 0, width: BTN, height: BTN, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-                  <div style={{ width: "92px", height: "92px", borderRadius: "50%", overflow: "hidden", backgroundColor: "#000000", flexShrink: 0 }}>
-                    <img src="/skull_001.png" alt="skull" style={{ width: "100%", height: "100%", objectFit: "cover", mixBlendMode: "screen", display: "block" }} />
+                <div style={{
+                  position:       "absolute",
+                  top: 0, left: 0,
+                  width:          BTN,
+                  height:         BTN,
+                  display:        "flex",
+                  alignItems:     "center",
+                  justifyContent: "center",
+                  pointerEvents:  "none",
+                }}>
+                  <div style={{
+                    width:           "92px",
+                    height:          "92px",
+                    borderRadius:    "50%",
+                    overflow:        "hidden",
+                    backgroundColor: "#000000",
+                    flexShrink:      0,
+                  }}>
+                    <img
+                      src="/skull_001.png"
+                      alt="skull"
+                      style={{
+                        width:        "100%",
+                        height:       "100%",
+                        objectFit:    "cover",
+                        mixBlendMode: "screen",
+                        display:      "block",
+                      }}
+                    />
                   </div>
                 </div>
               </div>
             )}
 
           </motion.a>
-
 
         </div>
 
@@ -429,7 +536,6 @@ const Hero = () => {
             />
           </div>
         </div>
-
 
       </motion.div>
 

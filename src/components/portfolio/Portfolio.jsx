@@ -1,6 +1,7 @@
 import "./portfolio.css";
 import SinusoidalVine from "./SinusoidalVine";
 import OrganicTech from './OrganicTech';
+import WhiteRabbit from "../services/whiteRabbit";
 
 const Portfolio = () => {
   return (
@@ -38,6 +39,9 @@ const Portfolio = () => {
         />
 
       </div>
+      <WhiteRabbit />
+
+      
     </div>
   );
 };

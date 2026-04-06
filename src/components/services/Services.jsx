@@ -10,6 +10,7 @@ import { useTheme } from "../../context/ThemeContext";
 import ComputerModelContainer from "./computer/ComputerModelContainer";
 import HarmonicRefractor from "./HarmonicRefractor";
 import Manifesto from "./Manifesto";
+import WhiteRabbit from "./whiteRabbit";  
 import "./services.css";
 
 
@@ -556,7 +557,9 @@ const Services = () => {
             );
           })}
           <div className="counters" /> {/* visit counter — implementação futura */}
+          
         </div>
+        <WhiteRabbit />
       </div>
 
       {/* ——— RIGHT ——— */}

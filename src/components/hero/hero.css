@@ -1,617 +1,326 @@
-
-
 .hero{
-
-height: 100%;
-
-overflow: hidden;
-
-display: flex;
-
+  height: 100%;
+  overflow: hidden;
+  display: flex;
 }
-
 
 .bg{
-
-position: absolute;
-
-top: 0;
-
-left: 0;
-
-width: 100%;
-
-height: 100%;
-
-z-index: -1;
-
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
 }
 
-
-/* ——— AVATAR IMAGE ——————————————————————————————————————————————— */
+/* ─── AVATAR IMAGE ─────────────────────────────────────────────────────────── */
 
 .avatar {
-
-position: absolute;
-
-bottom: 0;
-
-left: 50%;
-
-transform: translateX(-50%);
-
-width: 60%;
-
-max-width: 700px;
-
-display: flex;
-
-align-items: flex-end;
-
-justify-content: center;
-
-pointer-events: none;
-
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  max-width: 700px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
 }
-
 
 .avatar img {
-
-width: 100%;
-
-height: auto;
-
-object-fit: contain;
-
-mix-blend-mode: screen;
-
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  mix-blend-mode: screen;
 }
-
 
 /* Tablet */
 @media (max-width: 1024px) {
-
-.avatar {
-
-width: 80%;
-
-max-width: 600px;
-
+  .avatar { width: 80%; max-width: 600px; }
 }
-
-}
-
 
 /* Mobile */
 @media (max-width: 640px) {
-
-.avatar {
-
-width: 80%;
-
-max-width: 380px;
-
+  .avatar { width: 80%; max-width: 380px; }
 }
 
-}
-
-/* ——————————————————————————————————————————————————————————————— */
-
+/* ─────────────────────────────────────────────────────────────────────────── */
 
 .hImg{
-
-position: absolute;
-
-
-left:0;
-
-bottom:0;
-
-right:0;
-
-margin:auto;
-
-width:max-content;
-
-height:70%;
-
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  width: max-content;
+  height: 70%;
 }
-
 
 .hImg img{
-
-width: 100%;
-
-height: 100%;
-
-object-fit: cover;
-
-filter: contrast(95%) saturate(150%) blur(1px);
-
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(95%) saturate(150%) blur(1px);
 }
-
-
 
 .hSection{
-
-width: 50%;
-
-height: 100%;
-
-display: flex;
-
-flex-direction: column;
-
-justify-content: space-between;
-
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-
-
-.hSection.left{
-
-}
-
+.hSection.left{}
 
 .hTitle{
-
-margin-top: 50px;
-
-font-size: 100px;
-
-font-weight: 200;
-
-color: #15ed7aff;
-
+  margin-top: 50px;
+  font-size: 100px;
+  font-weight: 200;
+  color: #15ed7aff;
 }
-
 
 .hName{
-
-color: #ffffffff;
-
-font-weight: 500;
-
+  color: #ffffffff;
+  font-weight: 500;
 }
-
 
 .awards {
-
-width:30%;
-
-margin-bottom: 50px;
-
+  width: 30%;
+  margin-bottom: 50px;
 }
-
 
 .awards .aTitle {
-
-font-size: 50px;
-
-font-weight: 500;
-
-color: #ffffffff;
-
-margin-bottom: 16px;
-
+  font-size: 50px;
+  font-weight: 500;
+  color: #ffffffff;
+  margin-bottom: 16px;
 }
-
 
 .awards span{
-
-font-weight: 200;
-
-color: #b302f9ff;
-
-margin: 16px 0px;
-
+  font-weight: 200;
+  color: #b302f9ff;
+  margin: 16px 0px;
 }
-
-
 
 .awards p {
-
-display: flex;
-
-font-size: 15px;
-
-color: #888888ff;
-
-margin: 16px 0px;
-
+  display: flex;
+  font-size: 15px;
+  color: #888888ff;
+  margin: 16px 0px;
 }
-
-
-
 
 .awardImg {
-
-width: 60px;
-
-height: 60px;
-
-filter: invert(1);
-
-gap: 0px;
-
+  width: 60px;
+  height: 60px;
+  filter: invert(1);
+  gap: 0px;
 }
-
 
 .awardImg_2 {
-
-width: 60px;
-
-height: 60px;
-
-mix-blend-mode: screen;
-
-
+  width: 60px;
+  height: 60px;
+  mix-blend-mode: screen;
 }
-
 
 .awardImg_3 {
-
-width: 60px;
-
-height: 60px;
-
-filter: invert(1);
-
-
+  width: 60px;
+  height: 60px;
+  filter: invert(1);
 }
-
 
 .hSection.right{
-
-align-items: flex-end;
-
+  align-items: flex-end;
+  /* pulse-glow removido — filter em pai quebra mix-blend-mode nos filhos */
 }
-
 
 .follow{
-
-display: flex;
-
-flex-direction: column;
-
-gap:18px;
-
-padding: 16px;
-
-background-color: #640590ff;
-
-border-bottom-right-radius: 10px;
-
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 16px;
+  background-color: #640590ff;
+  border-bottom-right-radius: 10px;
 }
-
-
 
 .followTextContainer{
-
-width:20px;
-
-height:20px;
-
+  width: 20px;
+  height: 20px;
 }
-
 
 .followText{
-
-background-color: #15ed7aff;
-
-font-size: 18px;
-
-font-weight: 500;
-
-color: #000000ff;
-
-rotate:90deg;
-
-width:max-content;
-
-height:100%;
-
-padding:6px;
-
-padding-top: 10px;
-
-padding-right: 10px;
-
-transform-origin: left top;
-
-transform: translateY(-20px);
-
-display: flex;
-
-align-items: center;
-
-border-bottom-right-radius: 12px;
-
+  background-color: #15ed7aff;
+  font-size: 18px;
+  font-weight: 500;
+  color: #000000ff;
+  rotate: 90deg;
+  width: max-content;
+  height: 100%;
+  padding: 6px;
+  padding-top: 10px;
+  padding-right: 10px;
+  transform-origin: left top;
+  transform: translateY(-20px);
+  display: flex;
+  align-items: center;
+  border-bottom-right-radius: 12px;
 }
-
 
 .bubbleContainer{
-
-margin-top: 50px;
-
-width:50%;
-
-display: flex;
-
-gap:10px;
-
-justify-content: space-between;
-
-
+  margin-top: 50px;
+  width: 50%;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
 }
-
 
 .bubble{
-
-padding-top: 4px;
-
-padding-left: 10px;
-
-width:100%;
-
-font-weight: 700;
-
-font-size: 14px;
-
-color:black;
-
-background-color: white;
-
-border-radius: 7px 20px 0px 7px; 
-
-display: flex;
-
-gap: 10px;
-
-
+  padding-top: 4px;
+  padding-left: 10px;
+  width: 100%;
+  font-weight: 700;
+  font-size: 14px;
+  color: black;
+  background-color: white;
+  border-radius: 7px 20px 0px 7px;
+  display: flex;
+  gap: 10px;
 }
-
 
 .bubbleContainer img{
-
-width: 60px;
-
-height: 60px;
-
-object-fit: cover;
-
-background-color: #640590ff;
-
-border-radius: 100%;
-
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  background-color: #640590ff;
+  border-radius: 100%;
 }
-
 
 .certificate{
-
-width:30%;
-
-display: flex;
-
-flex-direction: column;
-
-align-items: center;
-
-text-align: center;
-
-font-weight: 300;
-
-color:#ddddddff;
-
-gap: 16px;
-
-margin-bottom: 30px;
-
-margin-right: 50px;
-
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-weight: 300;
+  color: #ddddddff;
+  gap: 16px;
+  margin-bottom: 30px;
+  margin-right: 50px;
 }
-
 
 .cImg {
-
-width: 150px;
-
-height: 150px;
-
-mix-blend-mode: screen;
-
+  width: 150px;
+  height: 150px;
+  mix-blend-mode: screen;
 }
-
 
 .contactBtn {
-
-margin-bottom: 50px;
-
-text-decoration: none;
-
-display: block;
-
-position: relative;
-
-overflow: hidden;
-
-border-radius: 50%;
-
-transition: transform 0.3s ease;
-
+  margin-bottom: 50px;
+  text-decoration: none;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
 }
-
 
 .contactButtonContainer {
-
-position: relative;
-
-width: 150px;
-
-height: 150px;
-
+  position: relative;
+  width: 150px;
+  height: 150px;
 }
-
 
 .contactBtn:hover {
-
-transform: scale(1.08);
-
-filter: drop-shadow(0px 8px 15px rgba(0, 0, 0, 0.5));
-
+  transform: scale(1.08);
+  filter: drop-shadow(0px 8px 15px rgba(0, 0, 0, 0.5));
 }
-
 
 .contactBtn:hover .mainCircle {
-
-stroke: #0a7a3f;
-
-stroke-width: 2px;
-
-transition: stroke 0.3s ease;
-
+  stroke: #0a7a3f;
+  stroke-width: 2px;
+  transition: stroke 0.3s ease;
 }
-
 
 .circleText {
-
-letter-spacing: 3px;
-
-font-size: 20px;
-
-fill: black;
-
-font-weight: 600;
-
+  letter-spacing: 3px;
+  font-size: 20px;
+  fill: black;
+  font-weight: 600;
 }
-
 
 .arrow {
-
-position: absolute;
-
-top: 50%;
-
-left: 50%;
-
-transform: translate(-50%, -50%);
-
-pointer-events: none;
-
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
-
 
 @media (min-width: 640px) {
+  .hTitle{
+    margin-top: 50px;
+    font-size: 64px;
+    font-weight: 200;
+    color: #15ed7aff;
+  }
 
-.hTitle{
+  .hName{
+    color: #ffffffff;
+    font-size: 100px;
+    font-weight: 500;
+  }
 
-margin-top: 50px;
+  .awards { width: 50%; }
 
-font-size: 64px;
+  .awardList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
 
-font-weight: 200;
-
-color: #15ed7aff;
-
+  .awardList img {
+    width: 50px;
+    height: 50px;
+  }
 }
-
-
-.hName{
-
-color: #ffffffff;
-
-font-size: 100px;
-
-font-weight: 500;
-
-}
-
-
-.awards {
-
-width:50%;
-
-}
-
-
-
-.awardList {
-
-display: flex;
-
-flex-direction: column;
-
-gap: 8px;
-
-} 
-
-.awardList img {
-
-width: 50px;
-
-height: 50px;
-
-} 
-
-
-}
-
 
 .aSubTitle{
-
-font-size: 24px;
-
-font-weight: 700;
-
-color: white;
-
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
 }
-
 
 @media (min-width: 1024px) {
+  .hTitle{
+    margin-top: 50px;
+    font-size: 100px;
+    font-weight: 200;
+    color: #15ed7aff;
+  }
 
-.hTitle{
-
-margin-top: 50px;
-
-font-size: 100px;
-
-font-weight: 200;
-
-color: #15ed7aff;
-
+  .awardList {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+  }
 }
 
 
-.awardList {
-
-display: flex;
-
-flex-direction: row;
-
-gap: 8px;
-
-}
-
-}
-
-/* 
-
-   Paleta dark:
-     --red:     #e11d48
-     --gray:    #737373   (neutral-500)
-     --black:   #000000
-     --white:   #ffffff
-   ───────────────────────────────────────────────────────────────────────────── */
-
+/*
+Paleta dark:
+--red: #e11d48
+--gray: #737373 (neutral-500)
+--black: #000000
+--white: #ffffff
+─────────────────────────────────────────────────────────────────────────────── */
 
 /* ── Tipografia H1 ── */
 html[data-theme="dark"] .hTitle {
-  color: #fa0606ff;                          /* verde → vermelho */
+  color: #fa0606ff;
   font-family: 'Share Tech Mono', 'Courier New', monospace;
 }
 
-/* "I'm Orpheu!" — era branco, agora preto (bg branco) */
 html[data-theme="dark"] .hName {
   color: white;
   font-family: 'Share Tech Mono', 'Courier New', monospace;
@@ -623,28 +332,25 @@ html[data-theme="dark"] .awards .aTitle {
   font-family: 'Share Tech Mono', monospace;
 }
 
-/* "Fullstack" span — era roxo, agora cinza neutral-500 */
 html[data-theme="dark"] .awards span {
   color: #737373;
 }
 
-/* "Web Developer" — era branco bold, agora preto */
 html[data-theme="dark"] .awards .aTitle span[style] {
   color: #000000 !important;
 }
 
-/* Parágrafo de descrição */
 html[data-theme="dark"] .aDesc {
   color: #737373;
 }
 
 /* ── Follow sidebar ── */
 html[data-theme="dark"] .follow {
-  background-color: #0a0000;              /* quase preto com toque vermelho */
+  background-color: #0a0000;
 }
 
 html[data-theme="dark"] .followText {
-  background-color: #fb090dff;             /* verde → vermelho */
+  background-color: #fb090dff;
   color: #ffffff;
 }
 
@@ -653,95 +359,82 @@ html[data-theme="dark"] .certificate {
   color: #737373;
 }
 
-/* ── Avatar — remove mix-blend-mode:screen em bg branco ── */
+/* ── Avatar ── */
 html[data-theme="dark"] .avatar img {
   mix-blend-mode: normal;
 }
 
-/* ── Hover do contactBtn ── */
+/* ── Hover contactBtn ── */
 html[data-theme="dark"] .contactBtn:hover .mainCircle {
   stroke: #f80404ff;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   SUBSTITUI o bloco dark follow no fim do hero.css
-   ───────────────────────────────────────────────────────────────────────────── */
+/* ── follow--dark ─────────────────────────────────────────────────────────── */
 
-/* ── follow--dark: mesmas dimensões visuais que .follow normal ───────────────── */
 html[data-theme="dark"] .follow--dark {
-  gap:              0;
-  padding:          8px 0;
-  min-height:       148px;
-  width:            52px;
-  display:          flex;
-  flex-direction:   column;
-  align-items:      flex-start;     /* âncora esquerda */
-  justify-content:  flex-end;       /* âncora fundo */
+  gap: 0;
+  padding: 8px 0;
+  min-height: 148px;
+  width: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
   background-color: #0a0000;
-  position:         relative;
-  overflow:         visible;        /* child visível fora dos limites */
+  position: relative;
+  overflow: visible;
 }
 
-/* ── "FOLLOW" — Teko, vertical, branco ──────────────────────────────────────── */
 .follow__darkLabel {
-  font-family:      'Teko', 'Share Tech Mono', monospace;
-  font-size:        22px;
-  font-weight:      600;
-  color:            #ffffff;
-  writing-mode:     vertical-rl;
+  font-family: 'Teko', 'Share Tech Mono', monospace;
+  font-size: 22px;
+  font-weight: 600;
+  color: #ffffff;
+  writing-mode: vertical-rl;
   text-orientation: mixed;
-  letter-spacing:   0.15em;
-  text-transform:   uppercase;
-  padding:          10px;
-  user-select:      none;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 10px;
+  user-select: none;
 }
 
-/* ── Child vermelho
-      âncora: bottom-left do follow--dark
-      transform-origin: bottom left → pivot no canto inferior esquerdo
-      Framer Motion anima rotate 0° → 90° clockwise                        ──── */
 .follow__darkChild {
-  position:         absolute;
-  bottom:           0;              /* âncora bottom */
-  left:             0;              /* âncora left */
-  transform-origin: bottom left;    /* pivot canto inferior esquerdo */
-
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform-origin: bottom left;
   background-color: #dc0000;
-  display:          flex;
-  align-items:      center;
-  justify-content:  center;
-  padding:          6px 10px;
-  min-width:        40px;
-  min-height:       80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  min-width: 40px;
+  min-height: 80px;
   border-top-right-radius: 8px;
-  z-index:          2;
+  z-index: 2;
 }
 
-/* ── "No One" — Teko, vertical, preto ───────────────────────────────────────── */
 .follow__darkChildText {
-  font-family:      'Teko', 'Share Tech Mono', monospace;
-  font-size:        22px;
-  font-weight:      700;
-  color:            #000000;
-  writing-mode:     vertical-rl;
+  font-family: 'Teko', 'Share Tech Mono', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: #000000;
+  writing-mode: vertical-rl;
   text-orientation: mixed;
-  letter-spacing:   0.15em;
-  text-transform:   uppercase;
-  padding:          8px;
-  user-select:      none;
-  white-space:      nowrap;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 8px;
+  user-select: none;
+  white-space: nowrap;
 }
 
-/* ── Avatar normal mode — desce 4px para alinhar com dark ── */
+/* ── Avatar normal mode ── */
 html:not([data-theme="dark"]) .avatar {
   transform: translateX(-50%) translateY(5px);
 }
 
-@keyframes pulse-glow {
-  0%, 100% { filter: brightness(100%) contrast(100%); }
-  50% { filter: brightness(115%) contrast(110%) saturate(120%); }
-}
-
-.hSection.right {
-  animation: pulse-glow 8s ease-in-out infinite;
-}
+/* ── pulse-glow REMOVIDO intencionalmente ────────────────────────────────────
+   filter numa animação num elemento pai cria um stacking context que impede
+   mix-blend-mode nos filhos de se misturar com o canvas de fundo.
+   Se quiseres o efeito, aplica-o apenas a elementos folha sem filhos blended.
+─────────────────────────────────────────────────────────────────────────────── */

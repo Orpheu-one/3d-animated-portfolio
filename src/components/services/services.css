@@ -14,12 +14,18 @@
 }
 
 .sSection.left {
-  margin-top: 150px;
+  /* padding-top em vez de margin-top:
+     margin-top empurrava a secção 150px para baixo FORA dos limites do overflow:hidden,
+     cortando o botão no fundo. Com padding-top o conteúdo começa 150px abaixo
+     mas a secção continua dentro dos limites de 100vh. */
+  padding-top: 60px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  align-items: left;
+  align-items: flex-start;
   padding-left: 50px;
+  /* overflow-y: hidden evita scroll não intencional */
+  overflow-y: hidden;
 }
 
 h1.sTitle {
@@ -31,7 +37,13 @@ h1.sTitle {
 .sLeftC {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  /* flex:1 + min-height:0 substitui height:100%.
+     height:100% fazia o container crescer além do pai,
+     empurrando o botão para fora do ecrã. */
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .serviceItem {
@@ -43,7 +55,6 @@ h1.sTitle {
   padding: 30px;
   border-radius: 10px;
   width: 80%;
-  /* border verde escuro base — o hover é controlado pelo Framer via style */
   border: 1px solid #15ed7aff;
   color: black;
 }
@@ -114,21 +125,14 @@ h1.sTitle {
   font-weight: bold;
 }
 
-/* ─── Responsive ─────────────────────────────────────────────────────────── */
+/* ─── Responsive ──────────────────────────────────────────────────────── */
+
 @media (min-width: 640px) {
-  .sSection.left {
-    width: 100%;
-  }
-  .sSection.right {
-    display: none;
-  }
+  .sSection.left  { width: 100%; }
+  .sSection.right { display: none; }
 }
 
 @media (min-width: 1024px) {
-  .sSection.left {
-    width: 50%;
-  }
-  .sSection.right {
-    display: block;
-  }
+  .sSection.left  { width: 50%; }
+  .sSection.right { display: block; }
 }
