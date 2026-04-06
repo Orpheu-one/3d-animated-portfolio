@@ -23,6 +23,7 @@ import RitualForm from "../deathclock/RitualForm"
 import RainbowHeart from "./RainbowHeart"
 
 import { useTheme } from "../../context/ThemeContext"
+import GalaxyBg from "./GalaxyBg"
 
 
 // ─── Tunables ────────────────────────────────────────────────────────────────
