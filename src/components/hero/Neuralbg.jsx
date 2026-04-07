@@ -1,14 +1,14 @@
 // src/components/hero/Neuralbg.jsx
-// Mesh original (verde, pulsos activos, screen blend) — INALTERADO
-// Galáxia: 6 emissores a 0°/60°/120°/180°/240°/300°, rotação CCW,
-// partículas puramente radiais, paleta branco/preto/magenta/ciano/amarelo.
+// Mesh original (verde, pulsos activos, screen blend) â€” INALTERADO
+// GalÃ¡xia: 6 emissores + clone 30Â°, cascata -10%/partÃ­cula, speed dinÃ¢mico,
+// paleta branco/preto/magenta/ciano/amarelo.
 
 import { useEffect, useRef } from 'react'
 
-// ─── CONFIG ───────────────────────────────────────────────────────────────────
+// â”€â”€â”€ CONFIG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const C = {
 
-  // ── Mesh — valores originais ───────────────────────────────────────────────
+  // â”€â”€ Mesh â€” valores originais â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   NODE_COUNT_MOBILE:  68,
   NODE_COUNT_TABLET:  85,
   NODE_COUNT_DESKTOP: 120,
@@ -24,23 +24,23 @@ const C = {
   CONNECTION_DIST: 180,
   NODE_RADIUS:     2.5,
 
-  // ── Cores originais: verde ─────────────────────────────────────────────────
+  // â”€â”€ Cores originais: verde â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   EDGE_OPACITY:  0.08,
   EDGE_COLOR:    '21, 237, 122',
   PULSE_COLOR:   '21, 237, 122',
 
-  // ── Triângulos originais ───────────────────────────────────────────────────
+  // â”€â”€ TriÃ¢ngulos originais â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   TRIANGLE_FILL:  '21, 237, 122',
   TRIANGLE_ALPHA: 0.08,
 
-  // ── Física original ────────────────────────────────────────────────────────
+  // â”€â”€ FÃ­sica original â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   BASE_DRIFT:   0.08,
   SPRING_K:     0.009,
   SPRING_DAMP:  0.88,
   MICRO_DAMP:   0.97,
   MAX_NODE_VEL: 6,
 
-  // ── Pulsos originais ───────────────────────────────────────────────────────
+  // â”€â”€ Pulsos originais â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   PULSE_SPEED:              0.0104,
   PULSE_WIDTH:              0.18,
   PULSE_SPAWN_RATE:         0.068,
@@ -60,33 +60,35 @@ const C = {
   PULSE_HEAD_RADIUS:        1.5,
   PULSE_GLOW_MULT:          3.5,
 
-  // ── Galáxia ────────────────────────────────────────────────────────────────
-  GAL_ARMS:             6,       // emissores: 0° / 60° / 120° / 180° / 240° / 300°
-  GAL_ROT_SPEED:        0.080,   // rad/s — CCW (aplicado como subtracção)
-  GAL_WAVE_INTERVAL:    4000,    // ms entre disparos
-  GAL_SPAWN_PER_ARM:    10,       // partículas por emissor por disparo
-  GAL_LIFETIME:         10000,    // ms
-  GAL_LIFETIME_VAR:     0.35,    // ±35%
-  GAL_RADIUS_BIRTH:     1.0,     // px no nascimento
-  GAL_RADIUS_PEAK:      100,      // px no pico (t=0.5)
-  GAL_SPEED:            105,     // px/s radial base
-  GAL_SPEED_VAR:        0.40,    // ±40% — dá profundidade ao stream
+  // â”€â”€ GalÃ¡xia â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  GAL_ARMS:             6,
+  GAL_ROT_SPEED:        0.600,     // rad/s â€” CCW
+  GAL_WAVE_INTERVAL:    4000,      // ms
+  GAL_SPAWN_PER_ARM:    10,        // partÃ­culas por emissor
+  GAL_SPAWN_DELAY:      100,        // ms de delay entre partÃ­culas do mesmo emissor
+  GAL_LIFETIME:         7000,      // ms
+  GAL_LIFETIME_VAR:     0.35,      // Â±35%
+  GAL_RADIUS_BIRTH:     1.0,       // px nascimento
+  GAL_RADIUS_PEAK:      100,       // px pico da 1Âª partÃ­cula (as seguintes -10%)
+  GAL_SPEED:            105,       // px/s base (serÃ¡ elevado se necessÃ¡rio para atingir o edge)
+  GAL_SPEED_VAR:        0.80,      // Â±40%
   GAL_MAX_PARTICLES:    600,
-  GAL_CORE_RADIUS:      55,      // glow central (px)
+  GAL_CORE_RADIUS:      55,
   GAL_CORE_ALPHA:       0.09,
-  // Raio do círculo de emissão (responsivo)
-  GAL_EMIT_RADIUS_DESKTOP: 200,  // px
-  GAL_EMIT_RADIUS_MOBILE:   50,  // px — reduzido em mobile
-  // Paleta de cores (aleatório por partícula)
+  GAL_EMIT_RADIUS_DESKTOP: 50,
+  GAL_EMIT_RADIUS_MOBILE:   50,
   GAL_PALETTE: [
     '255, 255, 255',   // branco
-    '0,   0,   0',     // preto  (invisível com screen blend, mas mantemos por pedido)
+    '0,   0,   0',     // preto
     '255, 0,   255',   // magenta
     '0,   255, 255',   // ciano
     '255, 255, 0',     // amarelo
   ],
+  // Clone: offset angular e scale do peak radius
+  GAL_CLONE_OFFSET:      Math.PI / 6,   // 30Â°
+  GAL_CLONE_SIZE_FACTOR: 0.5,           // 50% do tamanho principal
 }
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const rand  = (min, max) => Math.random() * (max - min) + min
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v))
@@ -122,7 +124,7 @@ const computeTriangles = (nodes, edges) => {
 }
 
 
-// ─── NeuralBg ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ NeuralBg â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const NeuralBg = () => {
   const canvasRef    = useRef(null)
   const stateRef     = useRef(null)
@@ -134,20 +136,17 @@ const NeuralBg = () => {
     const ctx    = canvas.getContext('2d')
     let rafId
 
-    // ── Galaxy state ──────────────────────────────────────────────────────────
     let galaxyAngle = 0
-    let lastWaveTs  = performance.now() - C.GAL_WAVE_INTERVAL  // dispara imediatamente
+    let lastWaveTs  = performance.now() - C.GAL_WAVE_INTERVAL
     let lastFrame   = performance.now()
     const gParticles = []
 
-    // ── resize ────────────────────────────────────────────────────────────────
     const resize = () => {
       canvas.width  = window.innerWidth
       canvas.height = window.innerHeight
       init()
     }
 
-    // ── init mesh ─────────────────────────────────────────────────────────────
     const init = () => {
       const W = canvas.width, H = canvas.height
       const desktop = W >= 1024, tablet = W >= 640 && W < 1024
@@ -178,7 +177,6 @@ const NeuralBg = () => {
       stateRef.current = { nodes, edges, adj, triangles, pulses: [], W, H }
     }
 
-    // ── spawnPulse (original) ─────────────────────────────────────────────────
     const spawnPulse = (fromNode=null, chainDepth=0, excludeEdge=null, isBurst=false) => {
       const s = stateRef.current
       if (!s || s.pulses.length >= C.MAX_PULSES) return
@@ -218,43 +216,63 @@ const NeuralBg = () => {
       }
     }
 
-    // ── fireGalaxyWave ────────────────────────────────────────────────────────
-    // Dispara todos os emissores em simultâneo.
-    // Cada emissor está no círculo de raio emitR, a ângulo armAngle (inclui rotação).
-    // Partículas vão em linha recta para fora (puramente radial, sem drift).
-    const fireGalaxyWave = (cx, cy, W) => {
+    // â”€â”€ spawnRingArm â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // Emite GAL_SPAWN_PER_ARM partÃ­culas de um Ãºnico ponto no anel.
+    // - index p: define peakRadius (p=0 â†’ peak mÃ¡x, cada +1 â†’ -10%)
+    // - sizeFactor: multiplicador adicional de peak (para o clone)
+    // - born delay: p * GAL_SPAWN_DELAY â†’ dispersÃ£o espacial progressiva
+    // - speed dinÃ¢mico: garante que a partÃ­cula chega ao edge do viewport
+    const spawnRingArm = (cx, cy, armAngle, emitR, diagR, sizeFactor) => {
+      const ex = cx + Math.cos(armAngle) * emitR
+      const ey = cy + Math.sin(armAngle) * emitR
+
+      for (let p = 0; p < C.GAL_SPAWN_PER_ARM; p++) {
+        if (gParticles.length >= C.GAL_MAX_PARTICLES) break
+        
+        // A cor agora Ã© calculada aqui dentro, gerando uma cor Ãºnica por partÃ­cula
+        const color = C.GAL_PALETTE[Math.floor(Math.random() * C.GAL_PALETTE.length)]
+
+        const lifetime = C.GAL_LIFETIME * (1 + (Math.random()-0.5) * C.GAL_LIFETIME_VAR)
+
+        // Speed dinÃ¢mico â€” partÃ­cula deve percorrer diagR em ~90% do lifetime
+        const lifeSec = lifetime / 1000
+        const minSpeed = (diagR - emitR) / (lifeSec * 0.88)
+        const baseSpeed = Math.max(C.GAL_SPEED, minSpeed)
+        const speed = baseSpeed * (1 + (Math.random()-0.5) * C.GAL_SPEED_VAR)
+
+        const vx = Math.cos(armAngle) * speed
+        const vy = Math.sin(armAngle) * speed
+
+        // Cascata de tamanho: 1Âª partÃ­cula = peak, cada seguinte -10%
+        const peakRadius = C.GAL_RADIUS_PEAK * sizeFactor * Math.pow(0.90, p)
+
+        gParticles.push({
+          x: ex, y: ey,
+          vx, vy,
+          born:     performance.now() + p * C.GAL_SPAWN_DELAY,
+          lifetime,
+          color,
+          peakRadius,
+        })
+      }
+    }
+
+    // â”€â”€ fireGalaxyWave â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    const fireGalaxyWave = (cx, cy, W, diagR) => {
       const isMobile = W < 640
       const emitR    = isMobile ? C.GAL_EMIT_RADIUS_MOBILE : C.GAL_EMIT_RADIUS_DESKTOP
 
       for (let arm = 0; arm < C.GAL_ARMS; arm++) {
-        // Ângulo deste emissor: espaçado 60° + rotação actual da galáxia
         const armAngle = arm * (Math.PI * 2 / C.GAL_ARMS) + galaxyAngle
-        const ex = cx + Math.cos(armAngle) * emitR
-        const ey = cy + Math.sin(armAngle) * emitR
 
-        for (let p = 0; p < C.GAL_SPAWN_PER_ARM; p++) {
-          if (gParticles.length >= C.GAL_MAX_PARTICLES) break
+        // Anel principal
+        spawnRingArm(cx, cy, armAngle, emitR, diagR, 1.0)
 
-          // Velocidade puramente radial (linha recta do centro para fora)
-          const speed = C.GAL_SPEED * (1 + (Math.random()-0.5) * C.GAL_SPEED_VAR)
-          const vx    = Math.cos(armAngle) * speed
-          const vy    = Math.sin(armAngle) * speed
-
-          // Cor aleatória da paleta
-          const color = C.GAL_PALETTE[Math.floor(Math.random() * C.GAL_PALETTE.length)]
-
-          gParticles.push({
-            x: ex, y: ey,
-            vx, vy,
-            born:     performance.now(),
-            lifetime: C.GAL_LIFETIME * (1 + (Math.random()-0.5) * C.GAL_LIFETIME_VAR),
-            color,
-          })
-        }
+        // Clone 30Â° â€” 50% do tamanho peak
+        spawnRingArm(cx, cy, armAngle + C.GAL_CLONE_OFFSET, emitR, diagR, C.GAL_CLONE_SIZE_FACTOR)
       }
     }
 
-    // ── draw ──────────────────────────────────────────────────────────────────
     const draw = (now) => {
       const s = stateRef.current
       if (!s) { rafId = requestAnimationFrame(draw); return }
@@ -264,12 +282,11 @@ const NeuralBg = () => {
 
       const { nodes, edges, triangles, pulses, W, H } = s
       const cx = W/2, cy = H/2
+      const diagR = Math.sqrt(W*W + H*H)
 
       ctx.clearRect(0, 0, W, H)
 
-      // ─── 1. GALÁXIA ─────────────────────────────────────────────────────────
-
-      // Rotação CCW: subtrai
+      // â”€â”€â”€ 1. GALÃXIA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       galaxyAngle -= C.GAL_ROT_SPEED * dt
 
       // Core glow central
@@ -279,23 +296,23 @@ const NeuralBg = () => {
       ctx.beginPath(); ctx.arc(cx, cy, C.GAL_CORE_RADIUS, 0, Math.PI*2)
       ctx.fillStyle = cg; ctx.fill()
 
-      // Trigger periódico — todos os emissores disparam em simultâneo
       if (now - lastWaveTs >= C.GAL_WAVE_INTERVAL) {
         lastWaveTs = now
-        fireGalaxyWave(cx, cy, W)
+        fireGalaxyWave(cx, cy, W, diagR)
       }
 
-      // Partículas — bell-curve de tamanho/alpha, cor individual
+      // PartÃ­culas â€” born delay: nÃ£o renderiza antes do tempo de nascimento
       let pi = gParticles.length
       while (pi--) {
         const p   = gParticles[pi]
+        if (now < p.born) continue          // ainda nÃ£o nasceu
         const age = now - p.born
         const t   = age / p.lifetime
         if (t >= 1) { gParticles.splice(pi, 1); continue }
         p.x += p.vx * dt
         p.y += p.vy * dt
         const b     = bell(t)
-        const size  = C.GAL_RADIUS_BIRTH + (C.GAL_RADIUS_PEAK - C.GAL_RADIUS_BIRTH) * b
+        const size  = C.GAL_RADIUS_BIRTH + (p.peakRadius - C.GAL_RADIUS_BIRTH) * b
         const alpha = (b * 0.88).toFixed(3)
         ctx.beginPath()
         ctx.arc(p.x, p.y, size, 0, Math.PI*2)
@@ -303,7 +320,7 @@ const NeuralBg = () => {
         ctx.fill()
       }
 
-      // ─── 2. TRIÂNGULOS ───────────────────────────────────────────────────────
+      // â”€â”€â”€ 2. TRIÃ‚NGULOS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       ctx.save()
       ctx.globalCompositeOperation = 'source-over'
       ctx.globalAlpha = C.TRIANGLE_ALPHA
@@ -316,7 +333,7 @@ const NeuralBg = () => {
       })
       ctx.globalAlpha = 1; ctx.restore()
 
-      // ─── 3. ARESTAS ──────────────────────────────────────────────────────────
+      // â”€â”€â”€ 3. ARESTAS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       edges.forEach(({ a, b, lastLit }) => {
         const na=nodes[a], nb=nodes[b]
         const age   = now - lastLit
@@ -326,13 +343,13 @@ const NeuralBg = () => {
         ctx.strokeStyle = `rgba(${C.EDGE_COLOR},${alpha})`; ctx.lineWidth=1; ctx.stroke()
       })
 
-      // ─── 4. NÓS ──────────────────────────────────────────────────────────────
+      // â”€â”€â”€ 4. NÃ“S â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       nodes.forEach(n => {
         ctx.beginPath(); ctx.arc(n.x,n.y,C.NODE_RADIUS,0,Math.PI*2)
         ctx.fillStyle = `rgba(${C.EDGE_COLOR},0.25)`; ctx.fill()
       })
 
-      // ─── 5. PULSOS ───────────────────────────────────────────────────────────
+      // â”€â”€â”€ 5. PULSOS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       const toRemove = []
       pulses.forEach((p, pIdx) => {
         const { a, b } = edges[p.edgeIdx]
@@ -375,7 +392,7 @@ const NeuralBg = () => {
       toRemove.reverse().forEach(i => pulses.splice(i,1))
       if (Math.random() < C.PULSE_SPAWN_RATE) spawnPulse()
 
-      // ─── 6. FÍSICA DOS NÓS ───────────────────────────────────────────────────
+      // â”€â”€â”€ 6. FÃSICA DOS NÃ“S â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       nodes.forEach(n => {
         n.vx += (n.ox - n.x) * C.SPRING_K
         n.vy += (n.oy - n.y) * C.SPRING_K
@@ -390,7 +407,6 @@ const NeuralBg = () => {
       rafId = requestAnimationFrame(draw)
     }
 
-    // ── boot ──────────────────────────────────────────────────────────────────
     resize()
     window.addEventListener('resize', resize)
     setTimeout(() => { for (let i=0; i<8; i++) spawnPulse() }, 100)
