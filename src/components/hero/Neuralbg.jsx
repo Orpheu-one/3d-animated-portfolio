@@ -69,7 +69,7 @@ const C = {
   GAL_LIFETIME:         7000,      // ms
   GAL_LIFETIME_VAR:     0.35,      // Â±35%
   GAL_RADIUS_BIRTH:     1.0,       // px nascimento
-  GAL_RADIUS_PEAK:      100,       // px pico da 1Âª partÃ­cula (as seguintes -10%)
+  GAL_RADIUS_PEAK:      180,       // px pico da 1Âª partÃ­cula (as seguintes -10%)
   GAL_SPEED:            105,       // px/s base (serÃ¡ elevado se necessÃ¡rio para atingir o edge)
   GAL_SPEED_VAR:        0.80,      // Â±40%
   GAL_MAX_PARTICLES:    600,
@@ -88,7 +88,7 @@ const C = {
   GAL_CLONE_OFFSET:      Math.PI / 6,   // 30Â°
   GAL_CLONE_SIZE_FACTOR: 0.5,           // 50% do tamanho principal
 }
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//------------------------------------------------------
 
 const rand  = (min, max) => Math.random() * (max - min) + min
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v))
