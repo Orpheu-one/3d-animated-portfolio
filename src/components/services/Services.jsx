@@ -11,23 +11,18 @@ import ComputerModelContainer from "./computer/ComputerModelContainer";
 import HarmonicRefractor from "./HarmonicRefractor";
 import Manifesto from "./Manifesto";
 import WhiteRabbit from "./whiteRabbit";
-import GalaxyEmitter from "./GalaxyEmitter"; // Importação do novo componente
+import GalaxyEmitter from "./GalaxyEmitter";
+import CuttlefishSphere from "./CuttlefishSphere"; // Novo componente de biologia sintética
 import "./services.css";
-
 
 // ╔══════════════════════════════════════════════════════════════╗
 // ║  TUNABLES                                                    ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-// ── CÂMARA ────────────────────────────────────────────────────
 const CAM_FOV = 45;
 const CAM_Z   = 4.5;
-
-// ── NORMAL — Geometria ────────────────────────────────────────
 const NRM_RADIUS  = 3.50;
 const NRM_DETAIL  = 1;
-
-// ── NORMAL — Material ─────────────────────────────────────────
 const NRM_COLOR        = "#15ed7a";
 const NRM_OPACITY      = 0.50;
 const NRM_METALNESS    = 0.85;
@@ -35,34 +30,24 @@ const NRM_ROUGHNESS    = 0.05;
 const NRM_EMISSIVE     = "#0bf45cff";
 const NRM_EMISSIVE_INT = 0.40;
 const NRM_ENV_INTENSITY= 0.80;
-
-// ── NORMAL — Distort ──────────────────────────────────────────
 const NRM_DISTORT_SPEED  = 2.2;
 const NRM_DISTORT_AMOUNT = 0.35;
 const NRM_DISTORT_RADIUS = 0.25;
-
-// ── NORMAL — Animação ─────────────────────────────────────────
 const NRM_AUTOROTATE_Y = 0.004;
 const NRM_AUTOROTATE_X = 0.001;
 const NRM_SCALEIN_DUR  = 1.4;
 const NRM_FLOAT_SPEED  = 1.2;
 const NRM_FLOAT_ROT    = 0.3;
 const NRM_FLOAT_INT    = 0.3;
-
-// ── NORMAL — Luzes ────────────────────────────────────────────
 const NRM_AMBIENT    = 0.08;
 const NRM_FILL_INT   = 2.2;
 const NRM_SPOT_INT   = 60;
 const NRM_SPOT_COLOR = "#00ff66";
 const NRM_BACK_INT   = 8;
 const NRM_BACK_COLOR = "#f2f8f4ff";
-
-// ── DARK — posição do ovo ─────────────────────────────────────
 const DRK_EGG_POS_X = 0.0;
 const DRK_EGG_POS_Y = -0.50;
 const DRK_EGG_POS_Z = 0.0;
-
-// ── DARK — Yolk ───────────────────────────────────────────────
 const DRK_YOLK_RADIUS = 0.495;
 const DRK_YOLK_Y      = -0.315;
 const DRK_ROT_X_MAX   = 0.028;
@@ -70,38 +55,24 @@ const DRK_ROT_Y_MAX   = 0.024;
 const DRK_ROT_Z_MAX   = 0.016;
 const DRK_DISTORT_SPD = 0.35;
 const DRK_DISTORT_AMT = 0.22;
-
-// ── DARK — Shell ──────────────────────────────────────────────
 const DRK_SCALE_Y      = 1.35;
 const DRK_SHELL_ROUGH  = 0.30;
 const DRK_SHELL_TRANS  = 0.96;
 const DRK_SHELL_THICK  = 0.55;
 const DRK_MASTER_SCALE = 0.75;
 const DRK_ENV_INT      = 0.55;
-
-// ── DARK — Filamentos ─────────────────────────────────────────
 const DRK_FIL_COUNT = 250;
 const DRK_FIL_SIZE  = 5.0;
 const DRK_FIL_SPEED = 0.18;
 const DRK_FIL_RISE  = 1.80;
 const DRK_FIL_TURB  = 0.30;
-
-// ── UNO — Esfera mãe ─────────────────────────────────────────
-const UNO_RADIUS         = 0.7;
+const UNO_RADIUS         = 0.5;
 const UNO_YOLK_Y         = -0.6;
-const UNO_DISTORT_SPEED  = 0.5;
-const UNO_DISTORT_AMOUNT = 0.15;
-const UNO_DISTORT_RADIUS = 0.32;
-
-// ── Cena geral ────────────────────────────────────────────────
 const BACKLIGHT_DARK = "#ff2200";
 const BACKLIGHT_UNO  = "#ff00ff";
-const BACKLIGHT_INT  = 50;
 
+// ── COMPONENTES DE APOIO (Inalterados) ─────────────────────────
 
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  SCALE-IN WRAPPER                                            ║
-// ╚══════════════════════════════════════════════════════════════╝
 const ScaleIn = ({ to = [1,1,1], duration = NRM_SCALEIN_DUR, children }) => {
   const ref     = useRef();
   const elapsed = useRef(0);
@@ -114,10 +85,6 @@ const ScaleIn = ({ to = [1,1,1], duration = NRM_SCALEIN_DUR, children }) => {
   return <group ref={ref}>{children}</group>;
 };
 
-
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  NORMAL YOLK                                                 ║
-// ╚══════════════════════════════════════════════════════════════╝
 const NormalYolk = () => {
   const meshRef = useRef();
   useFrame(() => {
@@ -168,10 +135,7 @@ const NormalContainer = () => (
   </div>
 );
 
-
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  DARK SHADERS                                                ║
-// ╚══════════════════════════════════════════════════════════════╝
+// ── DARK SHADERS ──────────────────────────────────────────────
 const DARK_VERT = `
 varying vec3 vPos; varying vec3 vNormal; uniform float uTime;
 float hash3(vec3 p){ return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453); }
@@ -190,7 +154,7 @@ void main() {
 
 const DARK_FRAG = `
 varying vec3 vPos; varying vec3 vNormal; uniform float uTime;
-float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
+float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123); }
 float noise(vec2 p){ vec2 i=floor(p),f=fract(p); f=f*f*(3.0-2.0*f); return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y); }
 float fbm3(vec3 p){ float v=0.0,a=0.5; for(int i=0;i<4;i++){v+=a*noise(vec2(p.x+p.z,p.y+p.z)); p=p.yzx*2.1; a*=0.5;} return v; }
 void main() {
@@ -230,10 +194,6 @@ void main() {
   gl_FragColor=vec4(mix(vec3(0.04,0.01,0.01),vec3(0.16,0.05,0.05),glow),glow*glow*vAlpha);
 }`;
 
-
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  DARK YOLK                                                   ║
-// ╚══════════════════════════════════════════════════════════════╝
 const DarkYolk = () => {
   const meshRef  = useRef();
   const matRef   = useRef();
@@ -258,10 +218,6 @@ const DarkYolk = () => {
   );
 };
 
-
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  DARK FILAMENTS                                              ║
-// ╚══════════════════════════════════════════════════════════════╝
 const DarkFilaments = () => {
   const matRef   = useRef();
   const uniforms = useMemo(() => ({ uTime: { value: 0 } }), []);
@@ -289,10 +245,6 @@ const DarkFilaments = () => {
   );
 };
 
-
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  DARK EGG                                                    ║
-// ╚══════════════════════════════════════════════════════════════╝
 const DarkEgg = () => {
   const shellRef = useRef();
   useFrame(({ clock }) => { if (shellRef.current) shellRef.current.rotation.y = clock.getElapsedTime() * 0.05; });
@@ -340,111 +292,28 @@ const DarkEggContainer = () => (
   </div>
 );
 
-
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  UNO YOLK — Psychedelic Mother Sphere (Emitter externalized)  ║
-// ╚══════════════════════════════════════════════════════════════╝
-
-const UNO_VERT = `
-varying vec3 vNormal;
-varying vec3 vLocalPos;
-uniform float uTime;
-
-float hash3(vec3 p){ return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453); }
-float noise3(vec3 p){
-  vec3 i=floor(p),f=fract(p); f=f*f*(3.0-2.0*f);
-  return mix(
-    mix(mix(hash3(i),hash3(i+vec3(1,0,0)),f.x),mix(hash3(i+vec3(0,1,0)),hash3(i+vec3(1,1,0)),f.x),f.y),
-    mix(mix(hash3(i+vec3(0,0,1)),hash3(i+vec3(1,0,1)),f.x),mix(hash3(i+vec3(0,1,1)),hash3(i+vec3(1,1,1)),f.x),f.y),
-    f.z);}
-
-void main() {
-  vLocalPos = position;
-  vec3 n = normalize(position);
-  float d = noise3(n * 3.0 + uTime * ${UNO_DISTORT_SPEED}) * ${UNO_DISTORT_AMOUNT};
-  vec3 pos = position + n * d;
-  vNormal = normalize(normalMatrix * normal);
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-}`;
-
-const UNO_FRAG = `
-uniform float uTime;
-varying vec3 vNormal;
-varying vec3 vLocalPos;
-
-// Paleta discreta solicitada
-vec3 getPaleta(float t) {
-  float m = mod(t * 5.0, 5.0);
-  if (m < 1.0) return vec4(1.0, 1.0, 1.0, 1.0).rgb; // Branco
-  if (m < 2.0) return vec4(1.0, 0.0, 1.0, 1.0).rgb; // Magenta
-  if (m < 3.0) return vec4(0.0, 1.0, 1.0, 1.0).rgb; // Ciano
-  if (m < 4.0) return vec4(1.0, 1.0, 0.0, 1.0).rgb; // Amarelo
-  return vec4(0.0, 0.0, 0.0, 1.0).rgb;             // Preto
-}
-
-void main() {
-  vec3 p = vLocalPos * 2.0;
-  float t = uTime * 0.4;
-  
-  // Campo de mistura
-  float field = length(p) * 0.5 + sin(p.x * 2.0 + t) * 0.2 + cos(p.y * 2.0 - t) * 0.2;
-  
-  // Aplicação da cor discreta
-  vec3 col = getPaleta(field + t * 0.1);
-  
-  float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0,0,1))), 3.0);
-  gl_FragColor = vec4(mix(col, vec3(1.0), fresnel * 0.3), 0.95);
-}`;
-
-const UnoYolk = () => {
-  const motherRef = useRef();
-  const matRef    = useRef();
-  const uniforms  = useMemo(() => ({ uTime: { value: 0 } }), []);
-
-  useFrame(({ clock }) => {
-    const t = clock.getElapsedTime();
-    if (motherRef.current) motherRef.current.rotation.y += 0.005;
-    if (matRef.current) matRef.current.uniforms.uTime.value = t;
-  });
-
-  return (
-    <>
-      <ambientLight intensity={0.2} />
-      <directionalLight position={[5, 5, 5]} intensity={2} color="#ffffff" />
-      <spotLight position={[4, 1, 1]} angle={0.35} penumbra={0.7} intensity={50} color={BACKLIGHT_UNO} distance={15} />
-
-      <Float speed={1.5} rotationIntensity={0.4} floatIntensity={0.4}>
-        <ScaleIn to={[1, 1, 1]} duration={NRM_SCALEIN_DUR}>
-          <group position={[0, UNO_YOLK_Y, 0]}>
-            <mesh ref={motherRef}>
-              <sphereGeometry args={[UNO_RADIUS, 64, 64]} />
-              <shaderMaterial ref={matRef} vertexShader={UNO_VERT} fragmentShader={UNO_FRAG} uniforms={uniforms} transparent />
-            </mesh>
-          </group>
-        </ScaleIn>
-      </Float>
-
-      {/* Emissor de Partículas Galáticas EXTERNO */}
-      <GalaxyEmitter yPos={UNO_YOLK_Y} />
-
-      <Environment preset="night" environmentIntensity={0.6} />
-    </>
-  );
-};
+// ── UNO CONTAINER (Substituição por CuttlefishSphere) ──────────
 
 const UnoContainer = () => (
   <div style={{ width: "100%", height: "100%" }}>
     <Canvas shadows gl={{ antialias: true, alpha: true }} onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), 0)}>
       <PerspectiveCamera makeDefault position={[0, 0, CAM_Z]} fov={CAM_FOV} />
-      <UnoYolk />
+      <ambientLight intensity={0.2} />
+      <directionalLight position={[5, 5, 5]} intensity={2} color="#ffffff" />
+      <spotLight position={[4, 1, 1]} angle={0.35} penumbra={0.7} intensity={50} color={BACKLIGHT_UNO} distance={15} />
+      
+      <group position={[0, UNO_YOLK_Y, 0]}>
+        <CuttlefishSphere />
+      </group>
+      
+      <GalaxyEmitter yPos={UNO_YOLK_Y} />
+      <Environment preset="night" environmentIntensity={0.6} />
     </Canvas>
   </div>
 );
 
+// ── RESTANTE DO CÓDIGO (Inalterado) ───────────────────────────
 
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  SCENE TITLES & DARK LINKS                                   ║
-// ╚══════════════════════════════════════════════════════════════╝
 const SCENE_TITLES = {
   1: { normal: "Organic Gestation",    dark: "Dark forces incubating...", uno: "Life in Motion"   },
   2: { normal: "Inorganic Structures", dark: "The Manifesto",             uno: "Digital Dreams"  },
@@ -455,24 +324,12 @@ const DARK_LINKS = [
   { id: "d2", title: "Orpheu's Descent", desc: "A journey into digital consciousness.",           href: "/dark/orpheu"    },
   { id: "d3", title: "Void Constructs",  desc: "Entities assembled from the absence of light.",   href: "/dark/void"      },
 ];
-
-
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  ITEMS — menu esquerdo                                       ║
-// ╚══════════════════════════════════════════════════════════════╝
 const items = [
-  { id: 2, titleDark:"Manifesto",     titleOther:"Tech-Core",     titleUno:"Tech-Core",
-           descDark:"A criação do pensamento para o futuro", descOther:"Inorganic Structures",    descUno:"Inorganic Structures"   },
-  { id: 1, titleDark:"Bio-Interface", titleOther:"Bio-Interface", titleUno:"Bio-Interface",
-           descDark:"Organic Gestation Systems",             descOther:"Organic Gestation Systems",descUno:"Organic Gestation Systems"},
-  { id: 3, titleDark:"Thinktank lαβ", titleOther:"Thinktank lαβ",titleUno:"lab ideas",
-           descDark:"Dissociative Original Ideas",           descOther:"Dissociative Original Ideas",descUno:"Where ideas become alive"},
+  { id: 2, titleDark: "Manifesto", titleOther: "Tech-Core", titleUno: "Tech-Core", descDark: "A criação do pensamento para o futuro", descOther: "Inorganic Structures", descUno: "Inorganic Structures" },
+  { id: 1, titleDark: "Bio-Interface", titleOther: "Bio-Interface", titleUno: "Bio-Interface", descDark: "Organic Gestation Systems", descOther: "Organic Gestation Systems", descUno: "Organic Gestation Systems" },
+  { id: 3, titleDark: "Thinktank lαβ", titleOther: "Thinktank lαβ", titleUno: "lab ideas", descDark: "Dissociative Original Ideas", descOther: "Dissociative Original Ideas", descUno: "Where ideas become alive" },
 ];
 
-
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  SERVICES                                                    ║
-// ╚══════════════════════════════════════════════════════════════╝
 const Services = () => {
   const { isDark, isUno } = useTheme();
   const [activeItemId, setActiveItemId]   = useState(2);
@@ -563,29 +420,29 @@ const Services = () => {
         </div>
 
         <h2 style={{
-          fontSize:"clamp(28px, 4vw, 62px)",
-          color:themeColor, textAlign:"center",
-          margin:"20px 0 16px", ...titleFont,
+          fontSize: "clamp(28px, 4vw, 62px)",
+          color: themeColor, textAlign: "center",
+          margin: "20px 0 16px", ...titleFont,
         }}>
           {sceneTitle}
         </h2>
 
         {isDark && (
-          <div style={{ display:"flex", gap:"14px", flexWrap:"wrap", padding:"0 8px" }}>
+          <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", padding: "0 8px" }}>
             {DARK_LINKS.map(link => (
               <a key={link.id} href={link.href} style={{
-                flex:"1 1 140px", textDecoration:"none",
-                border:`1px solid ${themeColor}44`, borderRadius:"6px",
-                padding:"14px", background:`${themeColor}08`,
-                transition:"border-color 0.15s, background 0.15s", display:"block",
+                flex: "1 1 140px", textDecoration: "none",
+                border: `1px solid ${themeColor}44`, borderRadius: "6px",
+                padding: "14px", background: `${themeColor}08`,
+                transition: "border-color 0.15s, background 0.15s", display: "block",
               }}
-                onMouseEnter={e=>{ e.currentTarget.style.borderColor=themeColor; e.currentTarget.style.background=`${themeColor}16`; }}
-                onMouseLeave={e=>{ e.currentTarget.style.borderColor=`${themeColor}44`; e.currentTarget.style.background=`${themeColor}08`; }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = themeColor; e.currentTarget.style.background = `${themeColor}16`; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = `${themeColor}44`; e.currentTarget.style.background = `${themeColor}08`; }}
               >
-                <h3 style={{ color:themeColor, margin:"0 0 6px", fontSize:"0.95rem", fontFamily:"'Teko','Share Tech Mono',monospace", fontWeight:600, letterSpacing:"0.06em" }}>
+                <h3 style={{ color: themeColor, margin: "0 0 6px", fontSize: "0.95rem", fontFamily: "'Teko','Share Tech Mono',monospace", fontWeight: 600, letterSpacing: "0.06em" }}>
                   {link.title}
                 </h3>
-                <p style={{ color:"rgba(255,255,255,0.50)", margin:0, fontSize:"0.78rem", lineHeight:1.5 }}>
+                <p style={{ color: "rgba(255,255,255,0.50)", margin: 0, fontSize: "0.78rem", lineHeight: 1.5 }}>
                   {link.desc}
                 </p>
               </a>
