@@ -12,7 +12,7 @@ import HarmonicRefractor from "./HarmonicRefractor";
 import Manifesto from "./Manifesto";
 import WhiteRabbit from "./whiteRabbit";
 import GalaxyEmitter from "./GalaxyEmitter";
-import CuttlefishSphere from "./CuttlefishSphere"; // Novo componente de biologia sintética
+import CuttlefishSphere from "./CuttlefishSphere";
 import "./services.css";
 
 // ╔══════════════════════════════════════════════════════════════╗
@@ -45,6 +45,7 @@ const NRM_SPOT_INT   = 60;
 const NRM_SPOT_COLOR = "#00ff66";
 const NRM_BACK_INT   = 8;
 const NRM_BACK_COLOR = "#f2f8f4ff";
+
 const DRK_EGG_POS_X = 0.0;
 const DRK_EGG_POS_Y = -0.50;
 const DRK_EGG_POS_Z = 0.0;
@@ -66,12 +67,14 @@ const DRK_FIL_SIZE  = 5.0;
 const DRK_FIL_SPEED = 0.18;
 const DRK_FIL_RISE  = 1.80;
 const DRK_FIL_TURB  = 0.30;
+
 const UNO_RADIUS         = 0.5;
 const UNO_YOLK_Y         = -0.6;
 const BACKLIGHT_DARK = "#ff2200";
 const BACKLIGHT_UNO  = "#ff00ff";
+const BACKLIGHT_INT  = 60; // <--- FIX: Variável definida para evitar erro no Dark Mode
 
-// ── COMPONENTES DE APOIO (Inalterados) ─────────────────────────
+// ── COMPONENTES DE APOIO ─────────────────────────────────────────
 
 const ScaleIn = ({ to = [1,1,1], duration = NRM_SCALEIN_DUR, children }) => {
   const ref     = useRef();
@@ -292,7 +295,7 @@ const DarkEggContainer = () => (
   </div>
 );
 
-// ── UNO CONTAINER (Substituição por CuttlefishSphere) ──────────
+// ── UNO CONTAINER ─────────────────────────────────────────────
 
 const UnoContainer = () => (
   <div style={{ width: "100%", height: "100%" }}>
@@ -312,18 +315,20 @@ const UnoContainer = () => (
   </div>
 );
 
-// ── RESTANTE DO CÓDIGO (Inalterado) ───────────────────────────
+// ── DADOS E LÓGICA DE COMPONENTE ─────────────────────────────────
 
 const SCENE_TITLES = {
   1: { normal: "Organic Gestation",    dark: "Dark forces incubating...", uno: "Life in Motion"   },
   2: { normal: "Inorganic Structures", dark: "The Manifesto",             uno: "Digital Dreams"  },
   3: { normal: "Dissociative Ideas",   dark: "Void Constructs",           uno: "lab ideas"       },
 };
+
 const DARK_LINKS = [
   { id: "d1", title: "The Manifesto",    desc: "A declaration of intent. The void has a voice.",  href: "/dark/manifesto" },
   { id: "d2", title: "Orpheu's Descent", desc: "A journey into digital consciousness.",           href: "/dark/orpheu"    },
   { id: "d3", title: "Void Constructs",  desc: "Entities assembled from the absence of light.",   href: "/dark/void"      },
 ];
+
 const items = [
   { id: 2, titleDark: "Manifesto", titleOther: "Tech-Core", titleUno: "Tech-Core", descDark: "A criação do pensamento para o futuro", descOther: "Inorganic Structures", descUno: "Inorganic Structures" },
   { id: 1, titleDark: "Bio-Interface", titleOther: "Bio-Interface", titleUno: "Bio-Interface", descDark: "Organic Gestation Systems", descOther: "Organic Gestation Systems", descUno: "Organic Gestation Systems" },
