@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Canvas, useFrame } from "@react-three/fiber";
 import {
@@ -11,13 +11,15 @@ import ComputerModelContainer from "./computer/ComputerModelContainer";
 import HarmonicRefractor from "./HarmonicRefractor";
 import Manifesto from "./Manifesto";
 import WhiteRabbit from "./whiteRabbit";
+import MorphingCuttlefish from "./MorphingCuttlefish";
+import GeometricGrid from "./GeometricGrid"; 
 import GalaxyEmitter from "./GalaxyEmitter";
-import CuttlefishSphere from "./CuttlefishSphere";
 import "./services.css";
+import CuttlefishBG from "./CuttlefishBG";
 
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  TUNABLES                                                    ║
-// ╚══════════════════════════════════════════════════════════════╝
+// â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+// â•‘  TUNABLES                                                    â•‘
+// â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 const CAM_FOV = 45;
 const CAM_Z   = 4.5;
@@ -69,12 +71,12 @@ const DRK_FIL_RISE  = 1.80;
 const DRK_FIL_TURB  = 0.30;
 
 const UNO_RADIUS         = 0.5;
-const UNO_YOLK_Y         = -0.6;
+const UNO_YOLK_Y         = -0.7;
 const BACKLIGHT_DARK = "#ff2200";
 const BACKLIGHT_UNO  = "#ff00ff";
-const BACKLIGHT_INT  = 60; // <--- FIX: Variável definida para evitar erro no Dark Mode
+const BACKLIGHT_INT  = 60; 
 
-// ── COMPONENTES DE APOIO ─────────────────────────────────────────
+// â”€â”€ COMPONENTES DE APOIO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const ScaleIn = ({ to = [1,1,1], duration = NRM_SCALEIN_DUR, children }) => {
   const ref     = useRef();
@@ -138,7 +140,7 @@ const NormalContainer = () => (
   </div>
 );
 
-// ── DARK SHADERS ──────────────────────────────────────────────
+// â”€â”€ DARK SHADERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const DARK_VERT = `
 varying vec3 vPos; varying vec3 vNormal; uniform float uTime;
 float hash3(vec3 p){ return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453); }
@@ -295,27 +297,49 @@ const DarkEggContainer = () => (
   </div>
 );
 
-// ── UNO CONTAINER ─────────────────────────────────────────────
+// â”€â”€ UNO CONTAINER (COM O NOVO GEOMETRIC GRID E MORPH) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-const UnoContainer = () => (
-  <div style={{ width: "100%", height: "100%" }}>
-    <Canvas shadows gl={{ antialias: true, alpha: true }} onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), 0)}>
-      <PerspectiveCamera makeDefault position={[0, 0, CAM_Z]} fov={CAM_FOV} />
-      <ambientLight intensity={0.2} />
-      <directionalLight position={[5, 5, 5]} intensity={2} color="#ffffff" />
-      <spotLight position={[4, 1, 1]} angle={0.35} penumbra={0.7} intensity={50} color={BACKLIGHT_UNO} distance={15} />
-      
-      <group position={[0, UNO_YOLK_Y, 0]}>
-        <CuttlefishSphere />
-      </group>
-      
-      <GalaxyEmitter yPos={UNO_YOLK_Y} />
-      <Environment preset="night" environmentIntensity={0.6} />
-    </Canvas>
-  </div>
-);
+const UnoContainer = () => {
+  // DUAS variáveis independentes para criar combinações inesperadas
+  const [objMode, setObjMode] = useState(0);
+  const [bgMode, setBgMode] = useState(0);
 
-// ── DADOS E LÓGICA DE COMPONENTE ─────────────────────────────────
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setObjMode(Math.floor(Math.random() * 3));
+      
+      // Lógica de proteção: Evita que o Fundo e a Esfera fiquem com o mesmo modo ao mesmo tempo
+      setBgMode(prevBg => {
+        let newBg;
+        do { newBg = Math.floor(Math.random() * 3); } while (newBg === objMode);
+        return newBg;
+      });
+
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [objMode]); // Dependência adicionada para ler o objMode atual
+
+  return (
+    <div style={{ width: "100%", height: "100%" }}>
+      <Canvas shadows gl={{ antialias: true, alpha: true }} onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), 0)}>
+        <PerspectiveCamera makeDefault position={[0, 0, CAM_Z]} fov={CAM_FOV} />
+        <ambientLight intensity={0.5} />
+        
+        <group position={[0, UNO_YOLK_Y, 0]}>
+          <MorphingCuttlefish mode={objMode} />
+        </group>
+        
+        {/* Renderiza o Fundo dependendo do bgMode sorteado */}
+        {bgMode === 0 && <CuttlefishBG />}
+        {bgMode === 1 && <GeometricGrid />}
+        {bgMode === 2 && <GalaxyEmitter />}
+        
+        <Environment preset="night" environmentIntensity={0.6} />
+      </Canvas>
+    </div>
+  );
+};
+// â”€â”€ DADOS E LÃ“GICA DE COMPONENTE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const SCENE_TITLES = {
   1: { normal: "Organic Gestation",    dark: "Dark forces incubating...", uno: "Life in Motion"   },
@@ -330,9 +354,9 @@ const DARK_LINKS = [
 ];
 
 const items = [
-  { id: 2, titleDark: "Manifesto", titleOther: "Tech-Core", titleUno: "Tech-Core", descDark: "A criação do pensamento para o futuro", descOther: "Inorganic Structures", descUno: "Inorganic Structures" },
+  { id: 2, titleDark: "Manifesto", titleOther: "Tech-Core", titleUno: "Tech-Core", descDark: "A criaÃ§Ã£o do pensamento para o futuro", descOther: "Inorganic Structures", descUno: "Inorganic Structures" },
   { id: 1, titleDark: "Bio-Interface", titleOther: "Bio-Interface", titleUno: "Bio-Interface", descDark: "Organic Gestation Systems", descOther: "Organic Gestation Systems", descUno: "Organic Gestation Systems" },
-  { id: 3, titleDark: "Thinktank lαβ", titleOther: "Thinktank lαβ", titleUno: "lab ideas", descDark: "Dissociative Original Ideas", descOther: "Dissociative Original Ideas", descUno: "Where ideas become alive" },
+  { id: 3, titleDark: "Thinktank lÎ±Î²", titleOther: "Thinktank lÎ±Î²", titleUno: "lab ideas", descDark: "Dissociative Original Ideas", descOther: "Dissociative Original Ideas", descUno: "Where ideas become alive" },
 ];
 
 const Services = () => {
@@ -349,7 +373,7 @@ const Services = () => {
 
   const bgActive   = `${themeColor}0D`;
   const borderW    = isUno ? "2px" : "1px";
-  const pageTitle  = isDark ? "Hephaestus Forge" : isUno ? "laβ" : "Services";
+  const pageTitle  = isDark ? "Hephaestus Forge" : isUno ? "laÎ²" : "Services";
   const sceneTitle = SCENE_TITLES[activeItemId]
     ? (isDark ? SCENE_TITLES[activeItemId].dark : isUno ? SCENE_TITLES[activeItemId].uno : SCENE_TITLES[activeItemId].normal)
     : "";
