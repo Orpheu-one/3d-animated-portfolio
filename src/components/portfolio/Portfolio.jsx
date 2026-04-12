@@ -1,47 +1,38 @@
-import "./portfolio.css";
-import SinusoidalVine from "./SinusoidalVine";
-import OrganicTech from './OrganicTech';
-import WhiteRabbit from "../services/whiteRabbit";
+import React, { Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, ContactShadows } from "@react-three/drei";
+import SpiralSmoke from "./SpiralSmoke";
 
 const Portfolio = () => {
   return (
-    <div className="portfolio">
-      <h1>Portfolio</h1>
-      
-      {/* Componente Horizontal que fizemos antes */}
-      <SinusoidalVine />
+    // Definimos uma altura para a secção, senão o Canvas fica com 0px
+    <div style={{ width: "100%", height: "600px", position: "relative" }}>
+      <Canvas
+        camera={{ position: [8, 8, 8], fov: 45 }}
+        shadows
+      >
+        {/* Fundo Branco para teste - vamos remover depois */}
+        <color attach="background" args={["#ffffff"]} />
+        
+        <ambientLight intensity={1.5} />
+        <pointLight position={[10, 10, 10]} intensity={2} />
+        
+        <Suspense fallback={null}>
+          <group position={[0, -2, 0]}> {/* Ajusta a posição da base aqui */}
+            <SpiralSmoke />
+          </group>
+          
+          {/* Sombra suave no "chão" para dar volume */}
+          <ContactShadows 
+            opacity={0.4} 
+            scale={10} 
+            blur={2.5} 
+            far={4} 
+          />
+        </Suspense>
 
-      {/* Contentor do Cluster Vertical */}
-      <div style={{ 
-        position: 'relative', 
-        width: '100%', 
-        height: '100vh', 
-        background: 'transparent', // Fundo escuro para destacar o núcleo vermelho
-        overflow: 'hidden',
-        marginTop: '50px'     // Separação visual do título
-      }}>
-
-        {/* Clone 1: Balanço suave */}
-        <OrganicTech 
-          left="20%" 
-          top="0px" 
-          baseHeight={350} 
-          amplitude={12} 
-        />
-
-        {/* Clone 2: Mais curto e rápido */}
-        <OrganicTech 
-          left="25%" 
-          top="0px" 
-          baseHeight={280} 
-          amplitude={20} 
-          speed={0.08} 
-        />
-
-      </div>
-      <WhiteRabbit />
-
-      
+        <OrbitControls enableZoom={false} makeDefault />
+      </Canvas>
     </div>
   );
 };

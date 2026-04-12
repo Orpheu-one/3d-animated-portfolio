@@ -4,13 +4,19 @@ import * as THREE from "three";
 
 // --- TUNABLES: CONTROLO ESTRUTURAL ---
 const C = {
-  WAVE_SPEED: 4.5,       
-  WAVE_FREQUENCY: 65.0,  
-  WAVE_WIDTH: 0.02,      
-  NOISE_SCALE: 3.0,
-  Z_OFFSET_BG: -8.5,
+  WAVE_SPEED: 5.5,       
+  WAVE_FREQUENCY: 75.0,  
+  WAVE_WIDTH: 0.13,      
+  NOISE_SCALE: 5.0,
+  Z_OFFSET_BG: -1.5,
   
-  // Intensidade
+  // --- NOVOS PARÂMETROS DE CURVATURA E DISTORÇÃO ---
+  CURVE_AMPLITUDE: 1.5,    // Intensidade da curvatura sinusoidal
+  CURVE_FREQUENCY: 2.0,     // Quantidade de "ondas" horizontais
+  DISTORTION_AMP: 10.0,      // Força da distorção orgânica nas bordas
+  DISTORTION_FREQ: 8.0,    // Granularidade da distorção (ondas pequenas)
+
+  // Intensidade Visual
   CONTRAST: 1.5,         
   VIBRANCE: 1.8          
 };
@@ -48,12 +54,25 @@ vec3 getPaleta(float t) {
 }
 
 void main() {
-  float pattern = vUv.y * ${C.WAVE_FREQUENCY.toFixed(2)} + vUv.x * 3.0 - uTime * ${C.WAVE_SPEED.toFixed(2)};
+  // 1. Curvatura Sinusoidal Principal (Acentuada)
+  float mainCurve = sin(vUv.x * ${C.CURVE_FREQUENCY.toFixed(2)} + uTime * 1.2) * ${C.CURVE_AMPLITUDE.toFixed(2)};
+  
+  // 2. Distorção Orgânica (Micro-ondas nas bordas para dinamismo)
+  float organicDist = sin(vUv.x * ${C.DISTORTION_FREQ.toFixed(2)} + uTime * 2.8) * ${C.DISTORTION_AMP.toFixed(2)};
+  
+  // 3. Pattern Unificado (Mantendo o paralelismo absoluto)
+  // Aplicamos ambas as distorções ao eixo Y antes do cálculo da onda
+  float pattern = (vUv.y * ${C.WAVE_FREQUENCY.toFixed(2)}) + (vUv.x * 3.0) + mainCurve + organicDist - (uTime * ${C.WAVE_SPEED.toFixed(2)});
+  
+  // Desenho das riscas com bordas suaves
   float wave = smoothstep(-${C.WAVE_WIDTH.toFixed(3)}, ${C.WAVE_WIDTH.toFixed(3)}, sin(pattern));
   
   vec3 col = getPaleta(wave * 2.0 + uTime * 0.2);
+  
+  // Aplicação do ruído base para textura de fundo
   col *= mix(0.4, 1.0, vNoise);
 
+  // Ajustes finais de contraste e vibração
   col = pow(col, vec3(${C.CONTRAST.toFixed(2)})) * ${C.VIBRANCE.toFixed(2)};
   gl_FragColor = vec4(col, 1.0);
 }`;
