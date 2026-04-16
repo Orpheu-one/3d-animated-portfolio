@@ -1,37 +1,42 @@
 import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, ContactShadows } from "@react-three/drei";
-import SpiralSmoke from "./SpiralSmoke";
+import { OrbitControls } from "@react-three/drei";
+import Vessel_002_Test from "./Vessel_002_Test";
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  NOTA SOBRE O CANVAS & DISPLACEMENT
+//
+//  Como vens do Maya, lembra-te que a densidade de polígonos (Subdivision) 
+//  está definida dentro do componente Vessel_002_Test na geometria da esfera.
+//  Se sentires que o relevo está "facetado", é lá que aumentamos os segmentos.
+// ─────────────────────────────────────────────────────────────────────────────
 
 const Portfolio = () => {
   return (
-    // Definimos uma altura para a secção, senão o Canvas fica com 0px
-    <div style={{ width: "100%", height: "600px", position: "relative" }}>
+    <div style={{ width: "100%", height: "700px", position: "relative", background: "#050000" }}>
       <Canvas
-        camera={{ position: [8, 8, 8], fov: 45 }}
-        shadows
+        gl={{ 
+          alpha: true, 
+          antialias: true,
+          // Importante para garantir que o displacement não sofra com precisão de profundidade
+          logarithmicDepthBuffer: true 
+        }}
+        style={{ background: "transparent" }}
+        // Ajustei a câmara ligeiramente para a esfera de teste (está no centro 0,0,0)
+        camera={{ position: [0, 0, 8], fov: 45 }}
       >
-        {/* Fundo Branco para teste - vamos remover depois */}
-        <color attach="background" args={["#ffffff"]} />
-        
-        <ambientLight intensity={1.5} />
-        <pointLight position={[10, 10, 10]} intensity={2} />
-        
         <Suspense fallback={null}>
-          <group position={[0, -2, 0]}> {/* Ajusta a posição da base aqui */}
-            <SpiralSmoke />
-          </group>
-          
-          {/* Sombra suave no "chão" para dar volume */}
-          <ContactShadows 
-            opacity={0.4} 
-            scale={10} 
-            blur={2.5} 
-            far={4} 
-          />
+          {/* O componente que utiliza o teu file Vessel_002.png */}
+          <Vessel_002_Test />
         </Suspense>
 
-        <OrbitControls enableZoom={false} makeDefault />
+        <OrbitControls
+          enableZoom={true}
+          enablePan={true}
+          minDistance={4}
+          maxDistance={20}
+          makeDefault
+        />
       </Canvas>
     </div>
   );
