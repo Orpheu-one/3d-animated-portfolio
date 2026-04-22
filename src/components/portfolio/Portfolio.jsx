@@ -1,43 +1,25 @@
-import React, { Suspense } from "react";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
-import Vessel_002_Test from "./Vessel_002_Test";
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  NOTA SOBRE O CANVAS & DISPLACEMENT
-//
-//  Como vens do Maya, lembra-te que a densidade de polígonos (Subdivision) 
-//  está definida dentro do componente Vessel_002_Test na geometria da esfera.
-//  Se sentires que o relevo está "facetado", é lá que aumentamos os segmentos.
-// ─────────────────────────────────────────────────────────────────────────────
+import React from "react";
+import OrphicPortal from "./OrphicPortal";
 
 const Portfolio = () => {
   return (
-    <div style={{ width: "100%", height: "700px", position: "relative", background: "#050000" }}>
-      <Canvas
-        gl={{ 
-          alpha: true, 
-          antialias: true,
-          // Importante para garantir que o displacement não sofra com precisão de profundidade
-          logarithmicDepthBuffer: true 
-        }}
-        style={{ background: "transparent" }}
-        // Ajustei a câmara ligeiramente para a esfera de teste (está no centro 0,0,0)
-        camera={{ position: [0, 0, 8], fov: 45 }}
-      >
-        <Suspense fallback={null}>
-          {/* O componente que utiliza o teu file Vessel_002.png */}
-          <Vessel_002_Test />
-        </Suspense>
-
-        <OrbitControls
-          enableZoom={true}
-          enablePan={true}
-          minDistance={4}
-          maxDistance={20}
-          makeDefault
-        />
-      </Canvas>
+    <div style={{ 
+      width: "100%", 
+      height: "100vh", // Forçamos a altura total para o mergulho
+      position: "relative", 
+      background: "#000",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      overflow: "hidden"
+    }}>
+      {/* O Portal é agora o protagonista da secção */}
+      <OrphicPortal />
+      
+      {/* Nota: Se quiseres o Canvas 3D no futuro, ele deve ser 
+         posicionado como absolute com z-index inferior para não 
+         bloquear a funcionalidade do portal.
+      */}
     </div>
   );
 };
